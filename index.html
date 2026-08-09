@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SPIN FREE — Flight Arcade</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    min-height:100vh;
+    overflow:hidden;
+    font-family:Arial,sans-serif;
+    color:#fff;
+    background:#050914;
+}
+
+.app{
+    min-height:100vh;
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 70% 15%,#173b67 0,transparent 32%),
+      linear-gradient(180deg,#07101e,#03060d);
+}
+
+/* STARS */
+.stars{
+    position:absolute;
+    inset:0;
+    opacity:.7;
+    background-image:
+      radial-gradient(circle,#fff 1px,transparent 1.5px);
+    background-size:90px 90px;
+    animation:starsMove 18s linear infinite;
+}
+
+@keyframes starsMove{
+    from{transform:translateY(0)}
+    to{transform:translateY(90px)}
+}
+
+/* TOP BAR */
+.top{
+    position:relative;
+    z-index:5;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 20px;
+    border-bottom:1px solid #ffffff14;
+    background:#050914aa;
+    backdrop-filter:blur(14px);
+}
+
+.logo{
+    font-weight:900;
+    font-size:25px;
+    letter-spacing:2px;
+}
+
+.logo span{
+    color:#50d9ff;
+}
+
+.creator{
+    font-size:12px;
+    color:#9daabd;
+}
+
+/* SOCIAL */
+.social{
+    position:relative;
+    z-index:5;
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    padding:12px;
+}
+
+.social a{
+    color:#dce8f7;
+    text-decoration:none;
+    font-size:12px;
+    padding:8px 13px;
+    border:1px solid #ffffff18;
+    border-radius:20px;
+    background:#ffffff08;
+}
+
+/* DASHBOARD */
+.dashboard{
+    position:relative;
+    z-index:4;
+    width:94%;
+    max-width:850px;
+    margin:10px auto 0;
+    display:grid;
+    grid-template-columns:1fr 1.5fr 1fr;
+    gap:10px;
+}
+
+.card{
+    padding:13px;
+    text-align:center;
+    border:1px solid #ffffff16;
+    border-radius:16px;
+    background:#ffffff08;
+    backdrop-filter:blur(12px);
+}
+
+.label{
+    color:#8392a9;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.value{
+    margin-top:4px;
+    font-size:20px;
+    font-weight:800;
+}
+
+/* GAME */
+.game{
+    position:relative;
+    z-index:3;
+    width:94%;
+    max-width:900px;
+    height:55vh;
+    min-height:330px;
+    margin:15px auto;
+    border:1px solid #ffffff18;
+    border-radius:25px;
+    overflow:hidden;
+    background:
+      linear-gradient(180deg,#10213a66,#050914cc);
+    box-shadow:0 25px 80px #000b;
+}
+
+/* MULTIPLIER */
+.multiplier{
+    position:absolute;
+    z-index:5;
+    left:0;
+    right:0;
+    top:30px;
+    text-align:center;
+    font-size:clamp(48px,10vw,88px);
+    font-weight:900;
+    letter-spacing:-3px;
+    text-shadow:0 0 30px #50d9ff66;
+}
+
+.multiplier small{
+    font-size:.38em;
+    letter-spacing:0;
+    color:#9fb0c7;
+}
+
+/* FLIGHT PATH */
+.path{
+    position:absolute;
+    left:7%;
+    bottom:18%;
+    width:86%;
+    height:65%;
+    border-bottom:2px solid #50d9ff35;
+    border-left:2px solid #50d9ff20;
+    transform:skewY(-17deg);
+}
+
+.flight-line{
+    position:absolute;
+    left:0;
+    bottom:0;
+    width:0;
+    height:3px;
+    border-radius:10px;
+    background:linear-gradient(90deg,#50d9ff,#fff);
+    box-shadow:0 0 18px #50d9ff;
+}
+
+/* PLANE */
+.plane{
+    position:absolute;
+    left:8%;
+    bottom:17%;
+    font-size:48px;
+    filter:drop-shadow(0 0 15px #50d9ff);
+    transform:rotate(-12deg);
+    transition:left .08s linear,bottom .08s linear;
+}
+
+.plane.fly{
+    animation:planePulse .6s infinite alternate;
+}
+
+@keyframes planePulse{
+    from{filter:drop-shadow(0 0 8px #50d9ff)}
+    to{filter:drop-shadow(0 0 25px #50d9ff)}
+}
+
+/* CRASH */
+.crash{
+    display:none;
+    position:absolute;
+    inset:0;
+    z-index:10;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    background:#080b12aa;
+    backdrop-filter:blur(4px);
+}
+
+.crash.show{
+    display:flex;
+}
+
+.crash h2{
+    margin:0;
+    font-size:55px;
+    color:#ff526d;
+    text-shadow:0 0 25px #ff526d66;
+}
+
+.crash p{
+    color:#b7c1d0;
+}
+
+/* BUTTON */
+.controls{
+    position:relative;
+    z-index:6;
+    display:flex;
+    justify-content:center;
+    margin-top:-5px;
+}
+
+#startBtn{
+    min-width:220px;
+    padding:17px 35px;
+    border:0;
+    border-radius:16px;
+    color:#031018;
+    background:linear-gradient(135deg,#55e0ff,#73ffc2);
+    font-size:18px;
+    font-weight:900;
+    cursor:pointer;
+    box-shadow:0 0 30px #50d9ff35;
+}
+
+#startBtn:active{
+    transform:scale(.96);
+}
+
+.info{
+    position:relative;
+    z-index:5;
+    text-align:center;
+    margin-top:12px;
+    color:#68758a;
+    font-size:11px;
+}
+
+@media(max-width:600px){
+
+    .top{
+        padding:14px;
+    }
+
+    .logo{
+        font-size:20px;
+    }
+
+    .creator{
+        display:none;
+    }
+
+    .dashboard{
+        grid-template-columns:1fr 1.4fr 1fr;
+    }
+
+    .game{
+        height:52vh;
+        min-height:310px;
+    }
+
+    .plane{
+        font-size:38px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="stars"></div>
+
+<header class="top">
+    <div class="logo">✈ <span>SPIN FREE</span></div>
+    <div class="creator">Created by <b>Denny Gunda</b></div>
+</header>
+
+<div class="social">
+    <a href="https://www.instagram.com/deepak__redhu_offical?igsh=dTNyZjY2MGo5d3lx"
+       target="_blank">📸 Instagram</a>
+
+    <a href="https://youtube.com/@aicreatorwithdadaji?si=diyf12pdp67ZQaXT"
+       target="_blank">▶ YouTube</a>
+</div>
+
+<section class="dashboard">
+
+    <div class="card">
+        <div class="label">Score</div>
+        <div class="value" id="score">0</div>
+    </div>
+
+    <div class="card">
+        <div class="label">Best Multiplier</div>
+        <div class="value" id="best">0.00x</div>
+    </div>
+
+    <div class="card">
+        <div class="label">Status</div>
+        <div class="value" id="status">READY</div>
+    </div>
+
+</section>
+
+<main class="game">
+
+    <div class="multiplier">
+        <span id="multiplier">1.00</span><small>x</small>
+    </div>
+
+    <div class="path"></div>
+
+    <div class="flight-line" id="line"></div>
+
+    <div class="plane" id="plane">✈️</div>
+
+    <div class="crash" id="crash">
+        <h2>CRASHED</h2>
+        <p>Flight ended at <b id="crashValue">1.00x</b></p>
+    </div>
+
+</main>
+
+<div class="controls">
+    <button id="startBtn" onclick="startFlight()">
+        ✈ START FLIGHT
+    </button>
+</div>
+
+<div class="info">
+    Arcade points only • No real-money betting
+</div>
+
+</div>
+
+<script>
+
+let running=false;
+let multiplier=1;
+let score=0;
+let best=Number(localStorage.getItem("spinFreeBestMulti")||0);
+
+document.getElementById("best").textContent=
+best.toFixed(2)+"x";
+
+let audioCtx=null;
+
+function beep(freq,duration,volume){
+
+    try{
+
+        if(!audioCtx){
+            audioCtx=new(
+                window.AudioContext||
+                window.webkitAudioContext
+            )();
+        }
+
+        if(audioCtx.state==="suspended")
+            audioCtx.resume();
+
+        const osc=audioCtx.createOscillator();
+        const gain=audioCtx.createGain();
+
+        osc.type="triangle";
+        osc.frequency.value=freq;
+
+        gain.gain.setValueAtTime(
+            volume,
+            audioCtx.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            .001,
+            audioCtx.currentTime+duration
+        );
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(
+            audioCtx.currentTime+duration
+        );
+
+    }catch(e){}
+}
+
+function startFlight(){
+
+    if(running)return;
+
+    running=true;
+
+    multiplier=1;
+
+    document.getElementById("status")
+        .textContent="FLYING";
+
+    document.getElementById("crash")
+        .classList.remove("show");
+
+    document.getElementById("startBtn")
+        .disabled=true;
+
+    document.getElementById("startBtn")
+        .textContent="✈ FLYING...";
+
+    document.getElementById("plane")
+        .classList.add("fly");
+
+    beep(220,.15,.05);
+
+    const crashPoint=
+        1.25+
+        Math.random()*5.75;
+
+    const start=performance.now();
+
+    function loop(now){
+
+        if(!running)return;
+
+        const elapsed=
+            (now-start)/1000;
+
+        multiplier=
+            1+
+            (elapsed*0.55)+
+            (elapsed*elapsed*0.025);
+
+        document.getElementById("multiplier")
+            .textContent=
+            multiplier.toFixed(2);
+
+        const progress=
+            Math.min(
+                (multiplier-1)/Math.max(crashPoint-1,.1),
+                1
+            );
+
+        document.getElementById("line")
+            .style.width=
+            (progress*90)+"%";
+
+        const plane=
+            document.getElementById("plane");
+
+        plane.style.left=
+            (8+progress*78)+"%";
+
+        plane.style.bottom=
+            (17+progress*42)+"%";
+
+        if(multiplier>=crashPoint){
+
+            finishFlight();
+
+            return;
+        }
+
+        if(Math.random()<.025)
+            beep(300,.05,.015);
+
+        requestAnimationFrame(loop);
+    }
+
+    requestAnimationFrame(loop);
+}
+
+function finishFlight(){
+
+    running=false;
+
+    const finalMulti=multiplier;
+
+    score+=Math.floor(finalMulti*10);
+
+    document.getElementById("score")
+        .textContent=score;
+
+    if(finalMulti>best){
+
+        best=finalMulti;
+
+        localStorage.setItem(
+            "spinFreeBestMulti",
+            best
+        );
+
+        document.getElementById("best")
+            .textContent=
+            best.toFixed(2)+"x";
+    }
+
+    document.getElementById("status")
+        .textContent="CRASHED";
+
+    document.getElementById("crashValue")
+        .textContent=
+        finalMulti.toFixed(2)+"x";
+
+    document.getElementById("crash")
+        .classList.add("show");
+
+    document.getElementById("plane")
+        .classList.remove("fly");
+
+    beep(90,.35,.09);
+
+    setTimeout(()=>{
+
+        const button=
+            document.getElementById("startBtn");
+
+        button.disabled=false;
+
+        button.textContent=
+            "✈ START FLIGHT";
+
+    },900);
+}
+
+</script>
+
+</body>
+</html>
