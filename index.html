@@ -2,772 +2,762 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>SPIN FREE • Denny Gunda</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SPIN FREE — Flight Arcade</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
- --bg:#070914;--card:#10152a;--card2:#151c36;
- --text:#fff;--muted:#9ba5c7;--accent:#7c5cff;
- --gold:#ffd45c;--green:#39e58c;--red:#ff5577;
-}
+*{box-sizing:border-box}
+
 body{
- background:radial-gradient(circle at 50% -10%,#26326e 0,#0b0f20 35%,#05060d 100%);
- color:var(--text);font-family:Arial,sans-serif;min-height:100vh;
- overflow-x:hidden
-}
-button{
- border:0;border-radius:14px;padding:12px 16px;color:white;
- background:linear-gradient(135deg,#765cff,#a34dff);
- font-weight:800;cursor:pointer;box-shadow:0 7px 22px #0006
-}
-button:active{transform:scale(.97)}
-button:disabled{opacity:.45;cursor:not-allowed}
-.hidden{display:none!important}
-
-/* LOADER */
-#loader{
- position:fixed;inset:0;z-index:99999;display:flex;
- flex-direction:column;align-items:center;justify-content:center;
- background:radial-gradient(circle,#1c2760,#05060d 70%);
- transition:.7s
-}
-.brand{
- font-size:46px;font-weight:1000;letter-spacing:5px;
- text-shadow:0 0 25px #866cff
-}
-.loaderMade{margin:10px 0;color:#aeb7df}
-.loaderTrack{width:260px;height:8px;background:#222945;border-radius:20px;overflow:hidden}
-.loaderFill{
- height:100%;width:0;background:linear-gradient(90deg,#6b5cff,#ff5dd8);
- animation:load 2.2s forwards
-}
-@keyframes load{to{width:100%}}
-.loaderSmall{margin-top:12px;color:#7883a9;font-size:13px}
-
-/* HEADER */
-header{
- position:sticky;top:0;z-index:50;
- backdrop-filter:blur(18px);background:#070914cc;
- border-bottom:1px solid #ffffff12;padding:13px
-}
-.nav{max-width:1050px;margin:auto;display:flex;align-items:center;gap:12px}
-.navLogo{font-size:22px;font-weight:1000;letter-spacing:2px;margin-right:auto}
-.gems{
- background:#171d35;border:1px solid #ffffff14;border-radius:30px;
- padding:9px 13px;color:var(--gold);font-weight:900
-}
-.sound{padding:9px 12px;background:#202743}
-
-/* APP */
-.app{max-width:1050px;margin:auto;padding:20px 14px 50px}
-.hero{
- text-align:center;padding:25px 10px 15px
-}
-.hero h1{font-size:clamp(34px,9vw,68px);font-weight:1000}
-.hero p{color:var(--muted);margin-top:7px}
-.badge{
- display:inline-block;margin-top:12px;padding:7px 12px;border-radius:20px;
- background:#ffffff0d;border:1px solid #ffffff12;color:#cbd1ed;font-size:12px
-}
-.panel{
- background:linear-gradient(145deg,#11172b,#0c1020);
- border:1px solid #ffffff12;border-radius:22px;padding:18px;
- box-shadow:0 20px 60px #0005;margin-top:16px
-}
-.panelTitle{font-size:18px;font-weight:900;margin-bottom:12px}
-.games{
- display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px
-}
-.gameCard{
- min-height:155px;padding:17px;border-radius:20px;
- background:linear-gradient(145deg,#171e38,#0e1326);
- border:1px solid #ffffff12;display:flex;flex-direction:column;
- justify-content:space-between;transition:.2s
-}
-.gameCard:hover{transform:translateY(-4px);border-color:#7c5cff66}
-.icon{font-size:42px}
-.gameCard h3{font-size:16px}
-.gameCard small{color:var(--muted);display:block;margin-top:4px}
-.play{margin-top:12px;width:100%;padding:9px}
-
-/* GAME VIEW */
-.gameView{display:none}
-.gameView.active{display:block}
-.back{background:#202743;margin-bottom:12px}
-.gameHeader{
- display:flex;align-items:center;gap:10px;margin-bottom:14px
-}
-.gameHeader h2{margin-right:auto}
-.stage{
- min-height:350px;border-radius:22px;overflow:hidden;position:relative;
- background:radial-gradient(circle at 50% 35%,#293c72,#10172d 55%,#080b16);
- border:1px solid #ffffff12;padding:18px
-}
-.center{text-align:center}
-.bigNumber{font-size:64px;font-weight:1000;text-shadow:0 0 30px #7c5cff}
-.status{color:#b9c1e0;margin:8px}
-.controls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}
-
-/* FLIGHT */
-.sky{height:330px;position:relative;overflow:hidden}
-.cloud{
- position:absolute;font-size:48px;opacity:.22;animation:cloud 12s linear infinite
-}
-.c1{top:40px;left:0}.c2{top:150px;left:70%;animation-duration:16s}
-@keyframes cloud{from{transform:translateX(-100px)}to{transform:translateX(700px)}}
-.plane{
- position:absolute;left:15%;bottom:70px;font-size:55px;
- filter:drop-shadow(0 0 15px #7c5cff);
- transition:.15s
-}
-.line{
- position:absolute;left:10%;bottom:65px;width:80%;height:4px;
- background:linear-gradient(90deg,#7c5cff,transparent);
- transform:rotate(-8deg);transform-origin:left
+    margin:0;
+    min-height:100vh;
+    overflow:hidden;
+    font-family:Arial,sans-serif;
+    color:#fff;
+    background:#050914;
 }
 
-/* BOTTLE */
-.bottleArea{
- display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
- max-width:500px;margin:35px auto
+.app{
+    min-height:100vh;
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 70% 15%,#173b67 0,transparent 32%),
+      linear-gradient(180deg,#07101e,#03060d);
 }
-.target{
- height:115px;border-radius:20px;background:#19203b;
- display:flex;align-items:center;justify-content:center;
- font-size:58px;border:2px solid #ffffff0d
-}
-.target.hit{animation:hit .3s}
-@keyframes hit{50%{transform:scale(1.2) rotate(8deg);opacity:.3}}
 
-/* SPIN */
-.reels{
- font-size:42px;letter-spacing:10px;
- background:#070a15;border:2px solid #ffffff14;border-radius:18px;
- padding:25px;margin:25px auto;max-width:430px;text-align:center
+.stars{
+    position:absolute;
+    inset:0;
+    opacity:.7;
+    background-image:
+      radial-gradient(circle,#fff 1px,transparent 1.5px);
+    background-size:90px 90px;
+    animation:starsMove 18s linear infinite;
 }
-.spinResult{color:var(--gold);font-weight:900;min-height:25px}
 
-/* D/T */
-.choiceGrid{display:flex;justify-content:center;gap:15px;margin:30px 0}
-.choice{
- min-width:130px;padding:25px;border-radius:20px;
- background:#1a203a;border:1px solid #ffffff15;text-align:center;font-size:24px
+@keyframes starsMove{
+    from{transform:translateY(0)}
+    to{transform:translateY(90px)}
 }
-.choice:hover{border-color:#7c5cff}
 
-/* CARDS */
-.cards{display:flex;justify-content:center;gap:8px;margin:25px 0;flex-wrap:wrap}
+.top{
+    position:relative;
+    z-index:5;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 20px;
+    border-bottom:1px solid #ffffff14;
+    background:#050914aa;
+    backdrop-filter:blur(14px);
+}
+
+.logo{
+    font-weight:900;
+    font-size:25px;
+    letter-spacing:2px;
+}
+
+.logo span{
+    color:#50d9ff;
+}
+
+.creator{
+    font-size:12px;
+    color:#9daabd;
+}
+
+.social{
+    position:relative;
+    z-index:5;
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    padding:12px;
+}
+
+.social a{
+    color:#dce8f7;
+    text-decoration:none;
+    font-size:12px;
+    padding:8px 13px;
+    border:1px solid #ffffff18;
+    border-radius:20px;
+    background:#ffffff08;
+}
+
+.login{
+    position:relative;
+    z-index:6;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+    padding:4px 12px 8px;
+}
+
+.login button{
+    border:1px solid #ffffff20;
+    border-radius:20px;
+    padding:9px 15px;
+    color:#fff;
+    background:#ffffff0d;
+    cursor:pointer;
+}
+
+.login button:hover{
+    background:#ffffff18;
+}
+
+.user{
+    position:relative;
+    z-index:6;
+    font-size:12px;
+    color:#aebbd0;
+    text-align:center;
+    margin-bottom:5px;
+}
+
+.dashboard{
+    position:relative;
+    z-index:4;
+    width:94%;
+    max-width:850px;
+    margin:10px auto 0;
+    display:grid;
+    grid-template-columns:1fr 1.5fr 1fr;
+    gap:10px;
+}
+
 .card{
- width:70px;height:100px;background:#f5f5f5;color:#111;
- border-radius:10px;display:flex;align-items:center;justify-content:center;
- font-size:30px;font-weight:900;box-shadow:0 8px 20px #0005
+    padding:13px;
+    text-align:center;
+    border:1px solid #ffffff16;
+    border-radius:16px;
+    background:#ffffff08;
+    backdrop-filter:blur(12px);
 }
 
-/* SHOP */
-.shop{
- display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px
+.label{
+    color:#8392a9;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:1px;
 }
-.item{
- background:#171d35;border:1px solid #ffffff12;border-radius:18px;
- padding:16px;text-align:center
-}
-.item .emoji{font-size:42px;margin:8px}
-.item p{color:#c2c8e0;font-size:13px;margin:5px}
 
-/* SOCIAL */
-.social{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px}
-.insta{background:linear-gradient(135deg,#ff4f9a,#7d4cff)}
-.yt{background:#e52c3d}
-.ad{
- min-height:75px;border:1px dashed #59617e;border-radius:16px;
- display:flex;align-items:center;justify-content:center;
- color:#737c9c;margin-top:16px;font-size:13px
+.value{
+    margin-top:4px;
+    font-size:20px;
+    font-weight:800;
 }
-footer{text-align:center;color:#697391;padding:30px 10px;font-size:12px}
 
-.toast{
- position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
- background:#161c33;border:1px solid #ffffff18;padding:12px 18px;
- border-radius:30px;z-index:1000;display:none
+.game{
+    position:relative;
+    z-index:3;
+    width:94%;
+    max-width:900px;
+    height:50vh;
+    min-height:290px;
+    margin:15px auto;
+    border:1px solid #ffffff18;
+    border-radius:25px;
+    overflow:hidden;
+    background:
+      linear-gradient(180deg,#10213a66,#050914cc);
+    box-shadow:0 25px 80px #000b;
 }
-.toast.show{display:block;animation:toast 2.3s forwards}
-@keyframes toast{0%{opacity:0;transform:translate(-50%,15px)}
- 15%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+
+.multiplier{
+    position:absolute;
+    z-index:5;
+    left:0;
+    right:0;
+    top:30px;
+    text-align:center;
+    font-size:clamp(48px,10vw,88px);
+    font-weight:900;
+    letter-spacing:-3px;
+    text-shadow:0 0 30px #50d9ff66;
+}
+
+.multiplier small{
+    font-size:.38em;
+    letter-spacing:0;
+    color:#9fb0c7;
+}
+
+.path{
+    position:absolute;
+    left:7%;
+    bottom:18%;
+    width:86%;
+    height:65%;
+    border-bottom:2px solid #50d9ff35;
+    border-left:2px solid #50d9ff20;
+    transform:skewY(-17deg);
+}
+
+.flight-line{
+    position:absolute;
+    left:0;
+    bottom:0;
+    width:0;
+    height:3px;
+    border-radius:10px;
+    background:linear-gradient(90deg,#50d9ff,#fff);
+    box-shadow:0 0 18px #50d9ff;
+}
+
+.plane{
+    position:absolute;
+    left:8%;
+    bottom:17%;
+    font-size:48px;
+    filter:drop-shadow(0 0 15px #50d9ff);
+    transform:rotate(-12deg);
+    transition:left .08s linear,bottom .08s linear;
+}
+
+.plane.fly{
+    animation:planePulse .6s infinite alternate;
+}
+
+@keyframes planePulse{
+    from{filter:drop-shadow(0 0 8px #50d9ff)}
+    to{filter:drop-shadow(0 0 25px #50d9ff)}
+}
+
+.crash{
+    display:none;
+    position:absolute;
+    inset:0;
+    z-index:10;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    background:#080b12aa;
+    backdrop-filter:blur(4px);
+}
+
+.crash.show{
+    display:flex;
+}
+
+.crash h2{
+    margin:0;
+    font-size:55px;
+    color:#ff526d;
+    text-shadow:0 0 25px #ff526d66;
+}
+
+.crash p{
+    color:#b7c1d0;
+}
+
+.controls{
+    position:relative;
+    z-index:6;
+    display:flex;
+    justify-content:center;
+    margin-top:-5px;
+}
+
+#startBtn{
+    min-width:220px;
+    padding:17px 35px;
+    border:0;
+    border-radius:16px;
+    color:#031018;
+    background:linear-gradient(135deg,#55e0ff,#73ffc2);
+    font-size:18px;
+    font-weight:900;
+    cursor:pointer;
+    box-shadow:0 0 30px #50d9ff35;
+}
+
+#startBtn:active{
+    transform:scale(.96);
+}
+
+.info{
+    position:relative;
+    z-index:5;
+    text-align:center;
+    margin-top:12px;
+    color:#68758a;
+    font-size:11px;
+}
+
+@media(max-width:600px){
+
+    .top{
+        padding:14px;
+    }
+
+    .logo{
+        font-size:20px;
+    }
+
+    .creator{
+        display:none;
+    }
+
+    .dashboard{
+        grid-template-columns:1fr 1.4fr 1fr;
+    }
+
+    .game{
+        height:48vh;
+        min-height:280px;
+    }
+
+    .plane{
+        font-size:38px;
+    }
+}
 </style>
+
+<script type="module">
+
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+} from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDFKJkVfsA-lcJgUE2PijP2gyzL7FsU35o",
+    authDomain: "spin-free-ff422.firebaseapp.com",
+    projectId: "spin-free-ff422",
+    storageBucket: "spin-free-ff422.firebasestorage.app",
+    messagingSenderId: "188051404919",
+    appId: "1:188051404919:web:35b1a6893b154584246e72",
+    measurementId: "G-3PXFB7W7SP"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+window.spinAuth = {
+    auth,
+    provider,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+};
+
+</script>
+
 </head>
 
 <body>
 
-<!-- LOADING -->
-<div id="loader">
- <div class="brand">SPIN FREE</div>
- <div class="loaderMade">This site is made by Denny Gunda</div>
- <div class="loaderTrack"><div class="loaderFill"></div></div>
- <div class="loaderSmall">Loading game zone...</div>
-</div>
+<div class="app">
 
-<header>
- <div class="nav">
-  <div class="navLogo">⚡ SPIN FREE</div>
-  <div class="gems">💎 <span id="gemCount">500</span></div>
-  <button class="sound" onclick="toggleSound()" id="soundBtn">🔊</button>
- </div>
+<div class="stars"></div>
+
+<header class="top">
+
+    <div class="logo">
+        ✈ <span>SPIN FREE</span>
+    </div>
+
+    <div class="creator">
+        Created by <b>Denny Gunda</b>
+    </div>
+
 </header>
 
-<main class="app">
+<div class="social">
 
-<section id="home">
- <div class="hero">
-  <h1>SPIN FREE</h1>
-  <p>Premium Mini Game Zone</p>
-  <div class="badge">FREE PLAY • VIRTUAL GEMS ONLY</div>
- </div>
+    <a href="https://www.instagram.com/deepak__redhu_offical"
+       target="_blank"
+       rel="noopener">
+       📸 Instagram
+    </a>
 
- <div class="panel">
-  <div class="panelTitle">🎮 Game Zone</div>
+    <a href="https://youtube.com/@aicreatorwithdadaji"
+       target="_blank"
+       rel="noopener">
+       ▶ YouTube
+    </a>
 
-  <div class="games">
+</div>
 
-   <div class="gameCard">
-    <div><div class="icon">✈️</div><h3>Flight Arcade</h3>
-    <small>Fly higher & beat your best</small></div>
-    <button class="play" onclick="openGame('flight')">PLAY</button>
-   </div>
+<div class="login">
 
-   <div class="gameCard">
-    <div><div class="icon">🍾</div><h3>Bottle Shooting</h3>
-    <small>Hit the targets</small></div>
-    <button class="play" onclick="openGame('bottle')">PLAY</button>
-   </div>
+    <button id="googleLogin">
+        🔐 Sign in with Google
+    </button>
 
-   <div class="gameCard">
-    <div><div class="icon">🐉</div><h3>Dragon vs Tiger</h3>
-    <small>Free-play card challenge</small></div>
-    <button class="play" onclick="openGame('dragon')">PLAY</button>
-   </div>
+    <button id="logout" style="display:none;">
+        Logout
+    </button>
 
-   <div class="gameCard">
-    <div><div class="icon">🎰</div><h3>Spin Bar</h3>
-    <small>Spin for virtual rewards</small></div>
-    <button class="play" onclick="openGame('spin')">PLAY</button>
-   </div>
+</div>
 
-   <div class="gameCard">
-    <div><div class="icon">🃏</div><h3>Teen Patti Style</h3>
-    <small>Free-play card game</small></div>
-    <button class="play" onclick="openGame('patti')">PLAY</button>
-   </div>
+<div class="user" id="userInfo">
+    Not signed in
+</div>
 
-  </div>
- </div>
+<section class="dashboard">
 
- <div class="panel">
-  <div class="panelTitle">🎁 Daily Reward</div>
-  <p style="color:var(--muted);margin-bottom:12px">Claim your free virtual Gems once per day.</p>
-  <button onclick="dailyReward()">CLAIM +100 💎</button>
- </div>
-
- <div class="panel">
-  <div class="panelTitle">🛍️ Cosmetic Shop</div>
-  <div class="shop">
-   <div class="item"><div class="emoji">✈️</div><b>Neon Plane</b><p>300 💎</p>
-    <button onclick="buyCosmetic('Neon Plane',300)">UNLOCK</button></div>
-   <div class="item"><div class="emoji">🌌</div><b>Galaxy Theme</b><p>250 💎</p>
-    <button onclick="buyCosmetic('Galaxy Theme',250)">UNLOCK</button></div>
-   <div class="item"><div class="emoji">🔥</div><b>Fire Effect</b><p>200 💎</p>
-    <button onclick="buyCosmetic('Fire Effect',200)">UNLOCK</button></div>
-   <div class="item"><div class="emoji">👑</div><b>Royal Badge</b><p>400 💎</p>
-    <button onclick="buyCosmetic('Royal Badge',400)">UNLOCK</button></div>
-  </div>
- </div>
-
- <div class="panel">
-  <div class="panelTitle">📢 Sponsor / Ad Space</div>
-  <div class="ad">ADVERTISEMENT / SPONSOR BANNER</div>
- </div>
-
- <div class="panel">
-  <div class="panelTitle">👤 Denny Gunda</div>
-  <p style="color:var(--muted)">Follow the creator</p>
-  <div class="social">
-   <a href="https://www.instagram.com/deepak__redhu_offical/" target="_blank">
-    <button class="insta">📸 Follow on Instagram</button>
-   </a>
-   <a href="https://youtube.com/@aicreatorwithdadaji" target="_blank">
-    <button class="yt">▶ YouTube</button>
-   </a>
-  </div>
- </div>
-</section>
-
-<!-- GAME VIEW -->
-<section id="gameView" class="gameView">
- <button class="back" onclick="closeGame()">← BACK TO GAMES</button>
-
- <!-- FLIGHT -->
- <div id="flightGame" class="gameScreen hidden">
-  <div class="gameHeader"><h2>✈️ Flight Arcade</h2></div>
-  <div class="stage">
-   <div class="sky">
-    <div class="cloud c1">☁️</div><div class="cloud c2">☁️</div>
-    <div class="line"></div><div id="plane" class="plane">✈️</div>
-   </div>
-   <div class="center">
-    <div id="multiplier" class="bigNumber">1.00x</div>
-    <div id="flightStatus" class="status">Ready to fly</div>
-    <div class="controls">
-     <button onclick="startFlight()">🚀 START</button>
-     <button id="pauseFlightBtn" onclick="pauseFlight()" disabled>⏸ PAUSE</button>
+    <div class="card">
+        <div class="label">Score</div>
+        <div class="value" id="score">0</div>
     </div>
-   </div>
-  </div>
- </div>
 
- <!-- BOTTLE -->
- <div id="bottleGame" class="gameScreen hidden">
-  <div class="gameHeader"><h2>🍾 Bottle Shooting</h2></div>
-  <div class="stage center">
-   <div class="bigNumber" id="bottleScore">0</div>
-   <div class="status">Tap bottles before the round ends!</div>
-   <div class="bottleArea" id="targets"></div>
-   <button onclick="startBottle()">🎯 START ROUND</button>
-  </div>
- </div>
+    <div class="card">
+        <div class="label">Best Multiplier</div>
+        <div class="value" id="best">0.00x</div>
+    </div>
 
- <!-- DRAGON -->
- <div id="dragonGame" class="gameScreen hidden">
-  <div class="gameHeader"><h2>🐉 Dragon vs Tiger</h2></div>
-  <div class="stage center">
-   <div class="status">Choose a side. Free-play virtual Gems only.</div>
-   <div class="choiceGrid">
-    <button class="choice" onclick="dragonRound('Dragon')">🐉<br>DRAGON</button>
-    <button class="choice" onclick="dragonRound('Tiger')">🐯<br>TIGER</button>
-   </div>
-   <div id="dragonResult" class="bigNumber" style="font-size:34px">VS</div>
-  </div>
- </div>
-
- <!-- SPIN -->
- <div id="spinGame" class="gameScreen hidden">
-  <div class="gameHeader"><h2>🎰 Spin Bar</h2></div>
-  <div class="stage center">
-   <div id="reels" class="reels">🔺 | ⭐ | 👑</div>
-   <div id="spinResult" class="spinResult">Ready!</div>
-   <div class="controls">
-    <button onclick="spin()">🎰 SPIN</button>
-    <button onclick="stopSpin()">⏹ STOP</button>
-   </div>
-  </div>
- </div>
-
- <!-- PATTI -->
- <div id="pattiGame" class="gameScreen hidden">
-  <div class="gameHeader"><h2>🃏 Teen Patti Style</h2></div>
-  <div class="stage center">
-   <div class="status">Free-play card challenge — no cash betting.</div>
-   <div id="cards" class="cards"></div>
-   <div id="pattiResult" class="spinResult">Deal three cards!</div>
-   <button onclick="dealPatti()">🃏 DEAL</button>
-  </div>
- </div>
+    <div class="card">
+        <div class="label">Status</div>
+        <div class="value" id="status">READY</div>
+    </div>
 
 </section>
 
-<footer>
- SPIN FREE © 2026 • Made by Denny Gunda<br>
- Virtual game experience — no real-money wagering.
-</footer>
+<main class="game">
+
+    <div class="multiplier">
+        <span id="multiplier">1.00</span><small>x</small>
+    </div>
+
+    <div class="path"></div>
+
+    <div class="flight-line" id="line"></div>
+
+    <div class="plane" id="plane">✈️</div>
+
+    <div class="crash" id="crash">
+
+        <h2>CRASHED</h2>
+
+        <p>
+            Flight ended at
+            <b id="crashValue">1.00x</b>
+        </p>
+
+    </div>
 
 </main>
 
-<div id="toast" class="toast"></div>
+<div class="controls">
+
+    <button id="startBtn">
+        ✈ START FLIGHT
+    </button>
+
+</div>
+
+<div class="info">
+    Arcade points only • No real-money betting
+</div>
+
+</div>
 
 <script>
-/* ---------------- STORAGE ---------------- */
 
-let gems = Number(localStorage.getItem("spinFreeGems") || 500);
-let unlocked = JSON.parse(localStorage.getItem("spinFreeItems") || "[]");
+let running = false;
+let multiplier = 1;
+let score = 0;
 
-function save(){
- localStorage.setItem("spinFreeGems",gems);
- localStorage.setItem("spinFreeItems",JSON.stringify(unlocked));
- document.getElementById("gemCount").textContent=gems;
+let best =
+Number(localStorage.getItem("spinFreeBestMulti") || 0);
+
+document.getElementById("best").textContent =
+best.toFixed(2) + "x";
+
+let audioCtx = null;
+
+function beep(freq, duration, volume){
+
+    try{
+
+        if(!audioCtx){
+
+            audioCtx = new(
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
+        }
+
+        if(audioCtx.state === "suspended")
+            audioCtx.resume();
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = "triangle";
+        osc.frequency.value = freq;
+
+        gain.gain.setValueAtTime(
+            volume,
+            audioCtx.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            .001,
+            audioCtx.currentTime + duration
+        );
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+
+        osc.stop(
+            audioCtx.currentTime + duration
+        );
+
+    }catch(e){}
+
 }
-save();
-
-/* ---------------- LOADING ---------------- */
-
-window.addEventListener("load",()=>{
- setTimeout(()=>{
-  document.getElementById("loader").style.opacity="0";
-  setTimeout(()=>document.getElementById("loader").remove(),700);
- },2300);
-});
-
-/* ---------------- SOUND ---------------- */
-
-let soundOn=true;
-let audioCtx=null;
-
-function audio(){
- if(!audioCtx)
-  audioCtx=new (window.AudioContext||window.webkitAudioContext)();
- if(audioCtx.state==="suspended") audioCtx.resume();
-}
-
-function tone(freq=500,duration=.08,type="sine",volume=.06){
- if(!soundOn)return;
- audio();
- let o=audioCtx.createOscillator();
- let g=audioCtx.createGain();
- o.type=type;o.frequency.value=freq;
- g.gain.setValueAtTime(volume,audioCtx.currentTime);
- g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);
- o.connect(g);g.connect(audioCtx.destination);
- o.start();
- o.stop(audioCtx.currentTime+duration);
-}
-
-function clickSound(){tone(650,.06,"square",.04)}
-function winSound(){
- tone(600,.08);setTimeout(()=>tone(800,.1),90);
- setTimeout(()=>tone(1000,.14),190);
-}
-function loseSound(){tone(180,.15,"sawtooth",.05)}
-
-function toggleSound(){
- soundOn=!soundOn;
- document.getElementById("soundBtn").textContent=soundOn?"🔊":"🔇";
- if(soundOn)clickSound();
-}
-
-/* ---------------- NAV ---------------- */
-
-function openGame(game){
- document.getElementById("home").style.display="none";
- document.getElementById("gameView").classList.add("active");
-
- document.querySelectorAll(".gameScreen").forEach(x=>x.classList.add("hidden"));
- document.getElementById(game+"Game").classList.remove("hidden");
- clickSound();
-
- if(game==="bottle")createTargets();
-}
-
-function closeGame(){
- stopSpin();
- flightRunning=false;
- bottleRunning=false;
- document.getElementById("gameView").classList.remove("active");
- document.getElementById("home").style.display="block";
- clickSound();
-}
-
-/* ---------------- DAILY REWARD ---------------- */
-
-function dailyReward(){
- let today=new Date().toDateString();
- let last=localStorage.getItem("dailySpinFreeReward");
-
- if(last===today){
-  toast("🎁 Daily reward already claimed!");
-  return;
- }
-
- gems+=100;
- localStorage.setItem("dailySpinFreeReward",today);
- save();
- winSound();
- toast("+100 💎 Gems added!");
-}
-
-/* ---------------- SHOP ---------------- */
-
-function buyCosmetic(name,cost){
- if(unlocked.includes(name)){
-  toast("✅ Already unlocked!");
-  return;
- }
-
- if(gems<cost){
-  toast("❌ Not enough Gems!");
-  loseSound();
-  return;
- }
-
- gems-=cost;
- unlocked.push(name);
- save();
- winSound();
- toast("✨ "+name+" unlocked!");
-}
-
-/* ---------------- FLIGHT ---------------- */
-
-let flightRunning=false;
-let flightPaused=false;
-let flightTimer=null;
-let multiplier=1;
 
 function startFlight(){
- if(flightRunning && !flightPaused)return;
 
- if(!flightRunning){
-  flightRunning=true;
-  flightPaused=false;
-  multiplier=1;
- }
+    if(running) return;
 
- document.getElementById("pauseFlightBtn").disabled=false;
- document.getElementById("pauseFlightBtn").textContent="⏸ PAUSE";
- document.getElementById("flightStatus").textContent="FLYING...";
- tone(220,.18,"sawtooth",.05);
+    running = true;
+    multiplier = 1;
 
- clearInterval(flightTimer);
- flightTimer=setInterval(()=>{
-  if(flightPaused)return;
+    document.getElementById("status")
+        .textContent = "FLYING";
 
-  multiplier+=.03;
-  document.getElementById("multiplier").textContent=multiplier.toFixed(2)+"x";
+    document.getElementById("crash")
+        .classList.remove("show");
 
-  let p=document.getElementById("plane");
-  p.style.left=Math.min(75,15+multiplier*2.5)+"%";
-  p.style.bottom=Math.min(250,70+multiplier*8)+"px";
+    document.getElementById("startBtn")
+        .disabled = true;
 
-  if(Math.random()<.15)tone(300+multiplier*20,.025,"sine",.015);
- },100);
+    document.getElementById("startBtn")
+        .textContent = "✈ FLYING...";
+
+    document.getElementById("plane")
+        .classList.add("fly");
+
+    beep(220,.15,.05);
+
+    const crashPoint =
+        1.25 + Math.random() * 5.75;
+
+    const start = performance.now();
+
+    function loop(now){
+
+        if(!running) return;
+
+        const elapsed =
+            (now - start) / 1000;
+
+        multiplier =
+            1 +
+            (elapsed * .55) +
+            (elapsed * elapsed * .025);
+
+        document.getElementById("multiplier")
+            .textContent =
+            multiplier.toFixed(2);
+
+        const progress =
+            Math.min(
+                (multiplier - 1) /
+                Math.max(crashPoint - 1, .1),
+                1
+            );
+
+        document.getElementById("line")
+            .style.width =
+            (progress * 90) + "%";
+
+        const plane =
+            document.getElementById("plane");
+
+        plane.style.left =
+            (8 + progress * 78) + "%";
+
+        plane.style.bottom =
+            (17 + progress * 42) + "%";
+
+        if(multiplier >= crashPoint){
+
+            finishFlight();
+            return;
+
+        }
+
+        if(Math.random() < .025)
+            beep(300,.05,.015);
+
+        requestAnimationFrame(loop);
+
+    }
+
+    requestAnimationFrame(loop);
+
 }
 
-function pauseFlight(){
- if(!flightRunning)return;
+function finishFlight(){
 
- flightPaused=!flightPaused;
- let btn=document.getElementById("pauseFlightBtn");
+    running = false;
 
- if(flightPaused){
-  btn.textContent="▶ RESUME";
-  document.getElementById("flightStatus").textContent="PAUSED";
-  tone(300,.1);
- }else{
-  btn.textContent="⏸ PAUSE";
-  document.getElementById("flightStatus").textContent="FLYING...";
-  tone(500,.1);
- }
+    const finalMulti = multiplier;
+
+    score += Math.floor(finalMulti * 10);
+
+    document.getElementById("score")
+        .textContent = score;
+
+    if(finalMulti > best){
+
+        best = finalMulti;
+
+        localStorage.setItem(
+            "spinFreeBestMulti",
+            best
+        );
+
+        document.getElementById("best")
+            .textContent =
+            best.toFixed(2) + "x";
+
+    }
+
+    document.getElementById("status")
+        .textContent = "CRASHED";
+
+    document.getElementById("crashValue")
+        .textContent =
+        finalMulti.toFixed(2) + "x";
+
+    document.getElementById("crash")
+        .classList.add("show");
+
+    document.getElementById("plane")
+        .classList.remove("fly");
+
+    beep(90,.35,.09);
+
+    setTimeout(()=>{
+
+        const button =
+            document.getElementById("startBtn");
+
+        button.disabled = false;
+
+        button.textContent =
+            "✈ START FLIGHT";
+
+    },900);
+
 }
 
-/* ---------------- BOTTLE SHOOTING ---------------- */
+document.getElementById("startBtn")
+    .addEventListener("click", startFlight);
 
-let bottleRunning=false;
-let bottleScore=0;
-let bottleTimer=null;
 
-function createTargets(){
- let box=document.getElementById("targets");
- box.innerHTML="";
- for(let i=0;i<6;i++){
-  let t=document.createElement("button");
-  t.className="target";
-  t.textContent="🍾";
-  t.onclick=()=>{
-   if(!bottleRunning)return;
-   bottleScore+=10;
-   document.getElementById("bottleScore").textContent=bottleScore;
-   t.classList.add("hit");
-   tone(850,.07,"square",.06);
-   setTimeout(()=>{
-    t.classList.remove("hit");
-    t.textContent="🍾";
-   },300);
-  };
-  box.appendChild(t);
- }
-}
+/* GOOGLE LOGIN */
 
-function startBottle(){
- bottleScore=0;
- bottleRunning=true;
- document.getElementById("bottleScore").textContent="0";
- createTargets();
- clearTimeout(bottleTimer);
+const googleLogin =
+document.getElementById("googleLogin");
 
- let time=15;
- document.querySelector("#bottleGame .status").textContent="⏱ "+time+" seconds";
+const logout =
+document.getElementById("logout");
 
- let countdown=setInterval(()=>{
-  time--;
-  document.querySelector("#bottleGame .status").textContent="⏱ "+time+" seconds";
-  tone(500,.025,"sine",.015);
+const userInfo =
+document.getElementById("userInfo");
 
-  if(time<=0){
-   clearInterval(countdown);
-   bottleRunning=false;
-   document.querySelector("#bottleGame .status").textContent=
-    "Round complete! Score: "+bottleScore;
-   if(bottleScore>=30)winSound();else loseSound();
-  }
- },1000);
-}
+googleLogin.addEventListener(
+    "click",
+    async()=>{
 
-/* ---------------- DRAGON TIGER ---------------- */
+        try{
 
-function dragonRound(choice){
- let result=Math.random()<.5?"Dragon":"Tiger";
- let el=document.getElementById("dragonResult");
+            await window.spinAuth
+                .signInWithPopup(
+                    window.spinAuth.auth,
+                    window.spinAuth.provider
+                );
 
- el.textContent="🎴 "+result;
+        }catch(error){
 
- if(choice===result){
-  el.innerHTML="🏆 "+result+" — YOU WIN!";
-  gems+=20;
-  save();
-  winSound();
-  toast("+20 💎 reward!");
- }else{
-  el.innerHTML="😅 "+result+" — TRY AGAIN";
-  loseSound();
- }
-}
+            console.error(error);
 
-/* ---------------- SPIN BAR ---------------- */
+            alert(
+                "Google login failed: " +
+                error.message
+            );
 
-let spinTimer=null;
-let spinning=false;
+        }
 
-const symbols=["🔺","⭐","👑","🏺","🦂","💎","🔥"];
+    }
+);
 
-function spin(){
- if(spinning)return;
+logout.addEventListener(
+    "click",
+    async()=>{
 
- if(gems<10){
-  toast("Need 10 💎 to spin");
-  loseSound();
-  return;
- }
+        try{
 
- gems-=10;
- save();
+            await window.spinAuth
+                .signOut(
+                    window.spinAuth.auth
+                );
 
- spinning=true;
- document.getElementById("spinResult").textContent="🔥 SPINNING...";
+        }catch(error){
 
- let count=0;
+            console.error(error);
 
- clearInterval(spinTimer);
+        }
 
- spinTimer=setInterval(()=>{
-  let a=symbols[Math.floor(Math.random()*symbols.length)];
-  let b=symbols[Math.floor(Math.random()*symbols.length)];
-  let c=symbols[Math.floor(Math.random()*symbols.length)];
+    }
+);
 
-  document.getElementById("reels").textContent=a+" | "+b+" | "+c;
-  tone(250+count*10,.025,"square",.02);
-  count++;
+window.spinAuth.onAuthStateChanged(
+    window.spinAuth.auth,
+    user=>{
 
-  if(count>=18){
-   clearInterval(spinTimer);
-   spinning=false;
+        if(user){
 
-   let a=symbols[Math.floor(Math.random()*symbols.length)];
-   let b=symbols[Math.floor(Math.random()*symbols.length)];
-   let c=symbols[Math.floor(Math.random()*symbols.length)];
+            googleLogin.style.display = "none";
+            logout.style.display = "inline-block";
 
-   document.getElementById("reels").textContent=a+" | "+b+" | "+c;
+            userInfo.textContent =
+                "👤 " +
+                (
+                    user.displayName ||
+                    user.email ||
+                    "Signed in"
+                );
 
-   if(a===b && b===c){
-    gems+=100;
-    document.getElementById("spinResult").textContent="🏆 JACKPOT! +100 💎";
-    winSound();
-   }else if(a===b || b===c || a===c){
-    gems+=25;
-    document.getElementById("spinResult").textContent="✨ MATCH! +25 💎";
-    winSound();
-   }else{
-    document.getElementById("spinResult").textContent="⚡ SPIN AGAIN!";
-    loseSound();
-   }
+        }else{
 
-   save();
-  }
- },100);
-}
+            googleLogin.style.display =
+                "inline-block";
 
-function stopSpin(){
- if(spinTimer){
-  clearInterval(spinTimer);
-  spinTimer=null;
-  spinning=false;
- }
-}
+            logout.style.display = "none";
 
-/* ---------------- TEEN PATTI STYLE ---------------- */
+            userInfo.textContent =
+                "Not signed in";
 
-const suits=["♠","♥","♦","♣"];
-const ranks=[
- {r:"A",v:14},{r:"K",v:13},{r:"Q",v:12},
- {r:"J",v:11},{r:"10",v:10},{r:"9",v:9}
-];
+        }
 
-function dealPatti(){
- let hand=[];
+    }
+);
 
- while(hand.length<3){
-  let x=ranks[Math.floor(Math.random()*ranks.length)];
-  let s=suits[Math.floor(Math.random()*suits.length)];
-  let card=x.r+s;
-
-  if(!hand.includes(card))hand.push(card);
- }
-
- let box=document.getElementById("cards");
- box.innerHTML="";
-
- hand.forEach(c=>{
-  let d=document.createElement("div");
-  d.className="card";
-  d.textContent=c;
-  box.appendChild(d);
- });
-
- let values=hand.map(c=>{
-  let rank=c.slice(0,-1);
-  return ranks.find(x=>x.r===rank)?.v||0;
- });
-
- let same=values[0]===values[1]&&values[1]===values[2];
- let high=Math.max(...values);
-
- if(same){
-  document.getElementById("pattiResult").textContent=
-   "👑 TRIO! +50 💎";
-  gems+=50;
-  winSound();
- }else if(new Set(values).size===3){
-  document.getElementById("pattiResult").textContent=
-   "✨ NICE HAND! +15 💎";
-  gems+=15;
-  winSound();
- }else{
-  document.getElementById("pattiResult").textContent=
-   "🎴 High card: "+high;
-  tone(300,.1);
- }
-
- save();
-}
-
-/* ---------------- TOAST ---------------- */
-
-function toast(msg){
- let t=document.getElementById("toast");
- t.textContent=msg;
- t.classList.remove("show");
- void t.offsetWidth;
- t.classList.add("show");
-}
 </script>
 
 </body>
 </html>
-        
