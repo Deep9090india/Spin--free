@@ -1,2374 +1,1682 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#080808">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SPIN FREE — Made by Denny Gunda</title>
 
 <style>
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
 body{
-  margin:0;
-  background:#070707;
-  color:#fff;
-  font-family:Arial,Helvetica,sans-serif;
-  overflow-x:hidden;
+ margin:0;background:#07080c;color:#fff;
+ font-family:Arial,sans-serif;
 }
-button{font:inherit}
-button,a{ -webkit-tap-highlight-color:transparent }
-
 :root{
-  --gold:#f4c542;
-  --gold2:#ffdf72;
-  --panel:#111;
-  --panel2:#171717;
-  --muted:#9b9b9b;
-  --line:#292929;
+ --gold:#f5c451;
+ --gold2:#ffe29a;
+ --bg:#0b0d13;
+ --card:#12151d;
+ --line:#292e3a;
+ --muted:#8d96a8;
 }
-
-/* LOADING */
-#loader{
-  position:fixed;
-  inset:0;
-  z-index:9999;
-  background:#050505;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  transition:.5s;
+button{
+ border:0;border-radius:12px;padding:12px 16px;
+ font-weight:800;cursor:pointer
 }
-#loader.hide{
-  opacity:0;
-  pointer-events:none;
-}
-.loader-logo{
-  font-size:34px;
-  font-weight:900;
-  letter-spacing:3px;
-  color:var(--gold);
-}
-.loader-sub{
-  margin-top:8px;
-  color:#aaa;
-  font-size:12px;
-}
-.loader-bar{
-  width:180px;
-  height:3px;
-  margin-top:25px;
-  background:#222;
-  overflow:hidden;
-  border-radius:10px;
-}
-.loader-bar span{
-  display:block;
-  width:60%;
-  height:100%;
-  background:var(--gold);
-  animation:load 1s infinite;
-}
-@keyframes load{
-  0%{transform:translateX(-100%)}
-  100%{transform:translateX(300%)}
-}
-
-/* APP */
 .app{
-  max-width:900px;
-  margin:auto;
-  min-height:100vh;
-  padding-bottom:90px;
-  background:
-    radial-gradient(circle at 80% 0%,#3b2c0c33,transparent 30%),
-    #070707;
+ min-height:100vh;
+ background:
+ radial-gradient(circle at 50% -10%,#4b3710 0,transparent 35%),
+ linear-gradient(#0b0d13,#050609);
 }
-
-/* HEADER */
-.header{
-  position:sticky;
-  top:0;
-  z-index:50;
-  padding:15px 16px;
-  background:#080808e8;
-  backdrop-filter:blur(18px);
-  border-bottom:1px solid #222;
-}
-.header-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+header{
+ height:65px;padding:0 16px;
+ display:flex;align-items:center;justify-content:space-between;
+ position:sticky;top:0;z-index:20;
+ background:#0b0d13ee;border-bottom:1px solid var(--line);
+ backdrop-filter:blur(15px)
 }
 .logo{
-  font-size:22px;
-  font-weight:900;
-  letter-spacing:2px;
+ color:var(--gold);font-size:22px;font-weight:900;
+ letter-spacing:2px
 }
-.logo span{color:var(--gold)}
-.user-mini{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:7px 10px;
-  border:1px solid #292929;
-  border-radius:20px;
-  background:#111;
-  font-size:12px;
+.made{font-size:11px;color:var(--muted)}
+main{max-width:900px;margin:auto;padding:15px 12px 90px}
+.page{display:none}
+.page.active{display:block}
+
+.hero,.panel,.gameCard{
+ background:linear-gradient(145deg,#151820,#0e1016);
+ border:1px solid var(--line);
+ border-radius:20px;
+ padding:16px;
+ box-shadow:0 12px 35px #0006
 }
-.avatar{
-  width:25px;
-  height:25px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:#292929;
+.hero h1{margin:7px 0;font-size:29px}
+.muted{color:var(--muted)}
+.tag{
+ color:var(--gold);font-size:10px;
+ text-transform:uppercase;letter-spacing:1.5px
+}
+.balance{
+ display:flex;align-items:center;gap:10px;
+ margin-top:14px
+}
+.points{font-size:25px;font-weight:900;color:var(--gold)}
+.gold{
+ background:linear-gradient(135deg,var(--gold2),#dba82d);
+ color:#181006
+}
+.dark{
+ background:#191d27;color:white;
+ border:1px solid #333948
+}
+.grid{
+ display:grid;grid-template-columns:repeat(2,1fr);
+ gap:10px;margin-top:12px
+}
+.gameCard{
+ min-height:145px;
+ display:flex;flex-direction:column;
+ justify-content:space-between
+}
+.gameIcon{font-size:35px}
+.small{font-size:12px}
+.toolbar{
+ display:flex;gap:8px;flex-wrap:wrap;margin-top:12px
+}
+nav{
+ position:fixed;bottom:0;left:0;right:0;height:70px;
+ display:grid;grid-template-columns:repeat(4,1fr);
+ background:#0c0f16f5;border-top:1px solid var(--line);
+ z-index:30
+}
+nav button{
+ background:transparent;color:#9099aa;
+ border-radius:0;font-size:11px
+}
+nav button.active{color:var(--gold)}
+
+.board{
+ width:min(92vw,430px);aspect-ratio:1;
+ margin:15px auto;
+ display:grid;grid-template-columns:repeat(11,1fr);
+ gap:2px;background:#252a34;padding:5px;
+ border-radius:16px
+}
+.cell{
+ background:#171b23;
+ display:flex;align-items:center;justify-content:center;
+ min-width:0
+}
+.safe{box-shadow:inset 0 0 0 2px #b99745}
+.token{
+ width:75%;aspect-ratio:1;border-radius:50%;
+ display:flex;align-items:center;justify-content:center;
+ font-size:8px;font-weight:bold;border:2px solid #fff8
 }
 
-/* DIAMOND BAR */
-.diamond-bar{
-  margin:12px 14px 0;
-  padding:12px 14px;
-  border:1px solid #3c3219;
-  border-radius:15px;
-  background:linear-gradient(135deg,#19150b,#100f0b);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+.dice{
+ text-align:center;font-size:55px;margin:8px
 }
-.diamond-info{
-  display:flex;
-  align-items:center;
-  gap:9px;
-}
-.diamond{
-  font-size:22px;
-}
-.diamond-count{
-  font-size:18px;
-  font-weight:900;
-  color:var(--gold2);
-}
-.diamond-label{
-  color:#888;
-  font-size:10px;
-}
-.plus{
-  border:1px solid #66521d;
-  background:#241d0c;
-  color:var(--gold2);
-  border-radius:10px;
-  padding:8px 12px;
-  font-weight:800;
-}
-
-/* LOGIN */
-.login-card{
-  margin:14px;
-  padding:18px;
-  border:1px solid #292929;
-  border-radius:18px;
-  background:linear-gradient(145deg,#151515,#0d0d0d);
-}
-.login-card h2{margin:0 0 6px}
-.login-card p{
-  margin:0 0 15px;
-  color:#999;
-  font-size:12px;
-}
-.login-buttons{
-  display:flex;
-  gap:8px;
-}
-.login-btn{
-  flex:1;
-  border:1px solid #333;
-  border-radius:12px;
-  padding:12px;
-  color:#fff;
-  background:#1a1a1a;
-  cursor:pointer;
-  font-weight:800;
-}
-.login-btn.primary{
-  color:#090909;
-  background:linear-gradient(135deg,var(--gold2),var(--gold));
-  border:0;
-}
-#logoutBtn{
-  display:none;
-}
-
-/* HERO */
-.hero{
-  margin:14px;
-  min-height:210px;
-  padding:25px;
-  border:1px solid #332b18;
-  border-radius:22px;
-  overflow:hidden;
-  position:relative;
-  background:
-    radial-gradient(circle at 80% 30%,#f4c54224,transparent 25%),
-    linear-gradient(135deg,#17130a,#101010 60%,#0b0b0b);
-}
-.hero:after{
-  content:"✦";
-  position:absolute;
-  right:25px;
-  top:15px;
-  font-size:90px;
-  color:#f4c54212;
-}
-.hero small{
-  color:var(--gold);
-  font-weight:800;
-}
-.hero h1{
-  margin:10px 0;
-  font-size:35px;
-  max-width:500px;
-}
-.hero p{
-  color:#a5a5a5;
-  max-width:500px;
-  line-height:1.5;
-}
-.hero-btn{
-  border:0;
-  border-radius:12px;
-  padding:12px 18px;
-  background:var(--gold);
-  color:#111;
-  font-weight:900;
-}
-
-/* SECTIONS */
-.section{
-  padding:5px 14px 10px;
-}
-.section-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin:10px 0;
-}
-.section-head h2{
-  margin:0;
-  font-size:19px;
-}
-.section-head span{
-  color:#777;
-  font-size:11px;
-}
-
-/* TABS */
-.tabs{
-  display:flex;
-  gap:7px;
-  overflow:auto;
-  padding-bottom:8px;
-}
-.tab{
-  white-space:nowrap;
-  border:1px solid #292929;
-  background:#111;
-  color:#aaa;
-  border-radius:20px;
-  padding:8px 14px;
-  font-size:12px;
-}
-.tab.active{
-  background:#f4c542;
-  color:#111;
-  border-color:#f4c542;
-  font-weight:900;
-}
-
-/* GAME GRID */
-.games{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
-.game-card{
-  min-height:170px;
-  border:1px solid #292929;
-  border-radius:18px;
-  overflow:hidden;
-  background:#111;
-  position:relative;
-  cursor:pointer;
-  transition:.2s;
-}
-.game-card:active{transform:scale(.97)}
-.game-art{
-  height:105px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:55px;
-  background:
-    radial-gradient(circle at 50% 40%,#ffffff13,transparent 45%),
-    linear-gradient(135deg,#1e1a0c,#101010);
-}
-.game-card:nth-child(2) .game-art{background:linear-gradient(135deg,#101c1c,#0c0c0c)}
-.game-card:nth-child(3) .game-art{background:linear-gradient(135deg,#21120d,#0d0d0d)}
-.game-card:nth-child(4) .game-art{background:linear-gradient(135deg,#171122,#0c0c0c)}
-.game-card:nth-child(5) .game-art{background:linear-gradient(135deg,#101b12,#0b0b0b)}
-.game-card:nth-child(6) .game-art{background:linear-gradient(135deg,#18100d,#0b0b0b)}
-.game-card:nth-child(7) .game-art{background:linear-gradient(135deg,#111b28,#0b0b0b)}
-.game-card:nth-child(8) .game-art{background:linear-gradient(135deg,#211b0c,#0b0b0b)}
-.game-info{padding:10px}
-.game-name{
-  font-weight:900;
-  font-size:13px;
-}
-.game-meta{
-  margin-top:5px;
-  display:flex;
-  justify-content:space-between;
-  color:#777;
-  font-size:10px;
-}
-.fav{
-  position:absolute;
-  top:8px;
-  right:8px;
-  width:30px;
-  height:30px;
-  border-radius:50%;
-  border:1px solid #ffffff1c;
-  background:#0009;
-  color:#aaa;
-}
-
-/* PROMO */
-.promo{
-  padding:15px;
-  border:1px solid #2c2615;
-  border-radius:18px;
-  background:linear-gradient(135deg,#19150b,#111);
-}
-.promo h3{margin:0 0 6px;color:var(--gold2)}
-.promo p{margin:0;color:#999;font-size:12px;line-height:1.5}
-
-/* SPONSOR */
-.sponsor{
-  padding:18px;
-  border-radius:18px;
-  border:1px solid #292929;
-  background:linear-gradient(135deg,#161616,#0d0d0d);
-}
-.sponsor h3{margin:0 0 6px}
-.sponsor p{
-  color:#999;
-  font-size:12px;
-  line-height:1.5;
-}
-.sponsor-btn{
-  border:1px solid #66521d;
-  background:#201a0b;
-  color:var(--gold2);
-  border-radius:11px;
-  padding:10px 14px;
-  font-weight:800;
-}
-
-/* CONTACT */
-.contact{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-}
-.contact a{
-  text-decoration:none;
-  color:#ddd;
-  text-align:center;
-  padding:12px 5px;
-  border:1px solid #292929;
-  background:#111;
-  border-radius:12px;
-  font-size:11px;
-}
-
-/* WALLET */
-.wallet-box{
-  border:1px solid #302817;
-  border-radius:18px;
-  padding:18px;
-  background:#111;
-}
-.wallet-balance{
-  font-size:35px;
-  font-weight:900;
-  color:var(--gold2);
-}
-.wallet-note{
-  color:#777;
-  font-size:11px;
-  line-height:1.5;
-  margin-top:8px;
-}
-.pack-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:8px;
-  margin-top:15px;
-}
-.pack{
-  border:1px solid #292929;
-  background:#161616;
-  padding:14px;
-  border-radius:13px;
-}
-.pack b{color:var(--gold2)}
-.pack small{
-  display:block;
-  margin-top:5px;
-  color:#777;
-}
-.coming{
-  margin-top:8px;
-  color:#777;
-  font-size:10px;
-}
-
-/* BOTTOM NAV */
-.bottom-nav{
-  position:fixed;
-  bottom:0;
-  left:50%;
-  transform:translateX(-50%);
-  width:min(900px,100%);
-  z-index:100;
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  padding:8px 7px calc(8px + env(safe-area-inset-bottom));
-  background:#090909ed;
-  backdrop-filter:blur(20px);
-  border-top:1px solid #242424;
-}
-.nav-btn{
-  border:0;
-  background:transparent;
-  color:#777;
-  padding:7px 2px;
-  font-size:10px;
-}
-.nav-btn span{
-  display:block;
-  font-size:20px;
-  margin-bottom:3px;
-}
-.nav-btn.active{
-  color:var(--gold2);
-}
-
-/* MODAL */
-.modal{
-  position:fixed;
-  inset:0;
-  z-index:500;
-  display:none;
-  align-items:flex-end;
-  justify-content:center;
-  background:#000b;
-}
-.modal.show{display:flex}
-.modal-box{
-  width:min(650px,100%);
-  max-height:90vh;
-  overflow:auto;
-  background:#111;
-  border:1px solid #333;
-  border-radius:24px 24px 0 0;
-  padding:20px;
-}
-.modal-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.modal-head h2{margin:0}
-.close{
-  width:36px;
-  height:36px;
-  border:1px solid #333;
-  border-radius:50%;
-  background:#191919;
-  color:#fff;
-}
-.game-screen{
-  margin-top:15px;
-  border:1px solid #292929;
-  border-radius:18px;
-  padding:18px;
-  min-height:300px;
-  background:#090909;
-}
-.game-title{
-  color:var(--gold2);
-  font-size:22px;
-  font-weight:900;
-}
-.game-controls{
-  display:flex;
-  justify-content:center;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:20px;
-}
-.action{
-  border:0;
-  border-radius:12px;
-  padding:11px 18px;
-  background:var(--gold);
-  color:#111;
-  font-weight:900;
-}
-.secondary{
-  background:#1a1a1a;
-  color:#fff;
-  border:1px solid #333;
-}
-.game-result{
-  text-align:center;
-  margin-top:20px;
-  min-height:40px;
-  color:#aaa;
-}
-
-/* SLOT */
-.reels{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  margin-top:25px;
-}
-.reel{
-  height:90px;
-  display:grid;
-  place-items:center;
-  font-size:42px;
-  border:1px solid #51431b;
-  border-radius:14px;
-  background:#17130a;
-}
-
-/* MINES */
-.mine-grid{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:6px;
-  margin-top:20px;
+.mines{
+ max-width:430px;margin:15px auto;
+ display:grid;grid-template-columns:repeat(5,1fr);gap:6px
 }
 .mine{
-  aspect-ratio:1;
-  border:1px solid #333;
-  border-radius:9px;
-  background:#161616;
-  color:#777;
-  font-size:20px;
+ aspect-ratio:1;background:#202531;
+ border:1px solid #3a4050;color:white;font-size:22px
+}
+.reels{
+ display:grid;grid-template-columns:repeat(3,1fr);gap:8px
+}
+.reel{
+ background:#080a0e;border:1px solid #3a3f4c;
+ border-radius:15px;padding:25px 5px;
+ text-align:center;font-size:42px
+}
+.row{
+ display:flex;gap:8px;justify-content:center;
+ align-items:center;flex-wrap:wrap;margin-top:12px
+}
+.cards{
+ display:flex;justify-content:center;
+ gap:7px;flex-wrap:wrap;margin:15px 0
+}
+.playing{
+ width:65px;height:90px;border-radius:9px;
+ background:#f2eee5;color:#111;
+ display:flex;align-items:center;justify-content:center;
+ font-size:25px;font-weight:900
 }
 
-/* LUDO */
-.ludo-board{
-  margin:18px auto;
-  width:min(300px,90vw);
-  aspect-ratio:1;
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  border:3px solid #555;
-  background:#191919;
-}
-.ludo-cell{
-  border:1px solid #333;
-  display:grid;
-  place-items:center;
-  font-size:14px;
-}
-
-/* CARDS */
-.memory-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:7px;
-  margin-top:20px;
-}
-.memory{
-  aspect-ratio:1;
-  border:1px solid #3c3219;
-  border-radius:10px;
-  background:#17130a;
-  color:#777;
-  font-size:25px;
-}
-
-/* BOTTLE */
-.bottle-area{
-  height:200px;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-  position:relative;
+.bottles{
+ height:260px;display:flex;
+ align-items:flex-end;justify-content:space-around;
+ padding:20px;border-radius:15px;
+ background:linear-gradient(#111925,#171007);
+ border-bottom:3px solid #956f32
 }
 .bottle{
-  font-size:100px;
-  transition:.1s;
+ background:none;font-size:48px;
+ transition:.15s
 }
-.target{
-  position:absolute;
-  right:15%;
-  top:30%;
-  font-size:45px;
+.bottle.hit{
+ transform:rotate(75deg) translateY(20px);
+ opacity:.45
 }
 
-/* DRAGON */
-.dragon-table{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:20px;
-}
-.side{
-  padding:30px 10px;
-  text-align:center;
-  border:1px solid #333;
-  border-radius:15px;
-  background:#151515;
-}
-.side b{
-  display:block;
-  font-size:30px;
-  margin-bottom:8px;
-}
-
-/* FLIGHT */
 .flight{
-  height:240px;
-  position:relative;
-  overflow:hidden;
-  border-radius:15px;
-  background:
-    radial-gradient(circle at 70% 20%,#315579,#0b1724 55%,#05070a);
+ height:310px;position:relative;overflow:hidden;
+ border:1px solid #303746;border-radius:18px;
+ background:
+ radial-gradient(circle at 75% 20%,#34527b,transparent 30%),
+ linear-gradient(#091421,#05070c)
 }
-.flight-plane{
-  position:absolute;
-  left:8%;
-  bottom:20%;
-  font-size:45px;
-  transition:.2s;
+.mult{
+ text-align:center;padding-top:25px;
+ font-size:52px;font-weight:900;color:var(--gold)
 }
-.flight-line{
-  position:absolute;
-  left:8%;
-  bottom:22%;
-  width:0;
-  height:3px;
-  background:var(--gold);
-  box-shadow:0 0 15px var(--gold);
+.plane{
+ position:absolute;left:7%;bottom:12%;
+ font-size:44px;transition:.08s
 }
-.flight-multi{
-  text-align:center;
-  padding-top:30px;
-  font-size:45px;
-  font-weight:900;
-  color:var(--gold2);
+.count{
+ text-align:center;font-size:40px;
+ margin:5px;color:var(--gold)
 }
+.history{
+ display:flex;gap:6px;flex-wrap:wrap
+}
+.pill{
+ padding:7px 10px;border-radius:20px;
+ background:#1b202a;border:1px solid #343b4a;
+ font-size:12px
+}
+textarea{
+ width:100%;height:100px;
+ background:#090b10;color:white;
+ border:1px solid #303746;
+ border-radius:10px;padding:10px
+}
+.notice{font-size:11px;color:#9ba4b4;line-height:1.5}
 
-/* PROFILE */
-.profile{
-  text-align:center;
-  padding:20px;
-}
-.profile-avatar{
-  width:70px;
-  height:70px;
-  margin:auto;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:#222;
-  font-size:30px;
-}
-.profile h2{margin-bottom:5px}
-.profile p{color:#777;font-size:12px}
-
-/* DESKTOP */
-@media(min-width:700px){
-  .games{grid-template-columns:repeat(4,1fr)}
-  .game-card{min-height:190px}
-  .game-art{height:120px}
-}
-
-/* TOAST */
-#toast{
-  position:fixed;
-  left:50%;
-  bottom:88px;
-  transform:translateX(-50%) translateY(20px);
-  z-index:1000;
-  opacity:0;
-  pointer-events:none;
-  background:#1b1b1b;
-  border:1px solid #3b3b3b;
-  padding:11px 16px;
-  border-radius:12px;
-  color:#eee;
-  font-size:12px;
-  transition:.3s;
-}
-#toast.show{
-  opacity:1;
-  transform:translateX(-50%) translateY(0);
+@media(min-width:650px){
+ .grid{grid-template-columns:repeat(3,1fr)}
 }
 </style>
-
-<!-- FIREBASE -->
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged,
-  RecaptchaVerifier,
-  signInWithPhoneNumber
-}
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
-const firebaseConfig={
-  apiKey:"AIzaSyDFKJkVfsA-lcJgUE2PijP2gyzL7FsU35o",
-  authDomain:"spin-free-ff422.firebaseapp.com",
-  projectId:"spin-free-ff422",
-  storageBucket:"spin-free-ff422.firebasestorage.app",
-  messagingSenderId:"188051404919",
-  appId:"1:188051404919:web:35b1a6893b154584246e72",
-  measurementId:"G-3PXFB7W7SP"
-};
-
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-const googleProvider=new GoogleAuthProvider();
-
-window.firebaseAuth={
-  auth,
-  googleProvider,
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged,
-  RecaptchaVerifier,
-  signInWithPhoneNumber
-};
-
-</script>
 </head>
 
 <body>
 
-<div id="loader">
-  <div class="loader-logo">SPIN FREE</div>
-  <div class="loader-sub">Made by Denny Gunda</div>
-  <div class="loader-bar"><span></span></div>
-</div>
-
 <div class="app">
 
-<header class="header">
-  <div class="header-row">
-    <div class="logo">SPIN <span>FREE</span></div>
-
-    <div class="user-mini" id="miniUser">
-      <div class="avatar">👤</div>
-      <span>Guest</span>
-    </div>
-  </div>
+<header>
+ <div class="logo">✦ SPIN FREE</div>
+ <div class="made">Made by Denny Gunda</div>
 </header>
-
-<div class="diamond-bar">
-  <div class="diamond-info">
-    <div class="diamond">💎</div>
-    <div>
-      <div class="diamond-count" id="diamondCount">2000</div>
-      <div class="diamond-label">VIRTUAL DIAMONDS</div>
-    </div>
-  </div>
-
-  <button class="plus" onclick="showWallet()">＋ GET DIAMONDS</button>
-</div>
-
-<div id="loginArea" class="login-card">
-  <h2>Welcome to SPIN FREE</h2>
-  <p>Login to save your profile and receive your welcome bonus.</p>
-
-  <div class="login-buttons">
-    <button class="login-btn primary" id="googleBtn">
-      📧 Google Login
-    </button>
-
-    <button class="login-btn" onclick="phoneLogin()">
-      📱 Phone Login
-    </button>
-  </div>
-
-  <button class="login-btn" id="logoutBtn" style="width:100%;margin-top:8px">
-    Logout
-  </button>
-</div>
 
 <main>
 
-<section class="hero">
-  <small>WELCOME BONUS • 2,000 💎</small>
-  <h1>Premium Games.<br>Pure Arcade Fun.</h1>
-  <p>
-    Play skill and entertainment games using virtual Diamonds.
-    Diamonds have no cash value and cannot be withdrawn.
-  </p>
-  <button class="hero-btn" onclick="goGames()">EXPLORE GAMES</button>
-</section>
+<!-- HOME -->
+<section id="home" class="page active">
 
-<section class="section" id="gamesSection">
+<div class="hero">
+ <div class="tag">FREE PLAY ARCADE</div>
+ <h1>Play. Score. Compete.</h1>
+ <p class="muted">Virtual points only • No deposits • No withdrawals</p>
 
-  <div class="section-head">
-    <h2>🔥 Games</h2>
-    <span>Premium Arcade</span>
-  </div>
+ <div class="balance">
+  🪙
+  <span class="points" id="points">2000</span>
+  <button class="dark" onclick="dailyBonus()">Daily Bonus</button>
+ </div>
+</div>
 
-  <div class="tabs">
-    <button class="tab active">Hot</button>
-    <button class="tab">Recent</button>
-    <button class="tab">Favorites</button>
-  </div>
+<h2>🎮 Games</h2>
 
-  <div class="games">
+<div class="grid">
 
-    <div class="game-card" onclick="openGame('slot')">
-      <button class="fav">♡</button>
-      <div class="game-art">🎰</div>
-      <div class="game-info">
-        <div class="game-name">Royal Slots</div>
-        <div class="game-meta"><span>Arcade</span><span>Free Play</span></div>
-      </div>
-    </div>
+<div class="gameCard">
+ <span class="gameIcon">🎲</span>
+ <b>Ludo</b>
+ <span class="muted small">You vs 3 demo bots</span>
+ <button class="gold" onclick="openGame('ludo')">PLAY</button>
+</div>
 
-    <div class="game-card" onclick="openGame('flight')">
-      <button class="fav">♡</button>
-      <div class="game-art">✈️</div>
-      <div class="game-info">
-        <div class="game-name">Flight Arcade</div>
-        <div class="game-meta"><span>Multiplier</span><span>Demo</span></div>
-      </div>
-    </div>
+<div class="gameCard">
+ <span class="gameIcon">💣</span>
+ <b>Mines</b>
+ <span class="muted small">Reveal safe tiles</span>
+ <button class="gold" onclick="openGame('mines')">PLAY</button>
+</div>
 
-    <div class="game-card" onclick="openGame('ludo')">
-      <button class="fav">♡</button>
-      <div class="game-art">🎲</div>
-      <div class="game-info">
-        <div class="game-name">Ludo</div>
-        <div class="game-meta"><span>Board</span><span>Free Play</span></div>
-      </div>
-    </div>
+<div class="gameCard">
+ <span class="gameIcon">🎰</span>
+ <b>Slots</b>
+ <span class="muted small">Animated arcade reels</span>
+ <button class="gold" onclick="openGame('slots')">PLAY</button>
+</div>
 
-    <div class="game-card" onclick="openGame('mines')">
-      <button class="fav">♡</button>
-      <div class="game-art">💣</div>
-      <div class="game-info">
-        <div class="game-name">Mines</div>
-        <div class="game-meta"><span>Puzzle</span><span>Free Play</span></div>
-      </div>
-    </div>
+<div class="gameCard">
+ <span class="gameIcon">🃏</span>
+ <b>Rummy Style</b>
+ <span class="muted small">Cards + bot</span>
+ <button class="gold" onclick="openGame('rummy')">PLAY</button>
+</div>
 
-    <div class="game-card" onclick="openGame('rummy')">
-      <button class="fav">♡</button>
-      <div class="game-art">🃏</div>
-      <div class="game-info">
-        <div class="game-name">Rummy Table</div>
-        <div class="game-meta"><span>Cards</span><span>Practice</span></div>
-      </div>
-    </div>
+<div class="gameCard">
+ <span class="gameIcon">♠️</span>
+ <b>Teen Patti Style</b>
+ <span class="muted small">Card battle + bots</span>
+ <button class="gold" onclick="openGame('patti')">PLAY</button>
+</div>
 
-    <div class="game-card" onclick="openGame('roulette')">
-      <button class="fav">♡</button>
-      <div class="game-art">🎡</div>
-      <div class="game-info">
-        <div class="game-name">Royal Roulette</div>
-        <div class="game-meta"><span>Demo</span><span>No Wager</span></div>
-      </div>
-    </div>
+<div class="gameCard">
+ <span class="gameIcon">🐯</span>
+ <b>Dragon vs Tiger</b>
+ <span class="muted small">Card reveal arcade</span>
+ <button class="gold" onclick="openGame('dvt')">PLAY</button>
+</div>
 
-    <div class="game-card" onclick="openGame('bottle')">
-      <button class="fav">♡</button>
-      <div class="game-art">🍾</div>
-      <div class="game-info">
-        <div class="game-name">Bottle Shooting</div>
-        <div class="game-meta"><span>Skill</span><span>Free Play</span></div>
-      </div>
-    </div>
+<div class="gameCard">
+ <span class="gameIcon">🍾</span>
+ <b>Bottle Shooting</b>
+ <span class="muted small">Skill challenge</span>
+ <button class="gold" onclick="openGame('bottle')">PLAY</button>
+</div>
 
-    <div class="game-card" onclick="openGame('memory')">
-      <button class="fav">♡</button>
-      <div class="game-art">🃏</div>
-      <div class="game-info">
-        <div class="game-name">Memory Cards</div>
-        <div class="game-meta"><span>Skill</span><span>Free Play</span></div>
-      </div>
-    </div>
+<div class="gameCard">
+ <span class="gameIcon">✈️</span>
+ <b>Flight Arcade</b>
+ <span class="muted small">Multiplier + collect points</span>
+ <button class="gold" onclick="openGame('flight')">PLAY</button>
+</div>
 
-    <div class="game-card" onclick="openGame('dragon')">
-      <button class="fav">♡</button>
-      <div class="game-art">🐯</div>
-      <div class="game-info">
-        <div class="game-name">Dragon & Tiger</div>
-        <div class="game-meta"><span>Skill</span><span>No Prediction</span></div>
-      </div>
-    </div>
+</div>
 
-    <div class="game-card" onclick="openGame('zoo')">
-      <button class="fav">♡</button>
-      <div class="game-art">🦁</div>
-      <div class="game-info">
-        <div class="game-name">SPIN ZOO</div>
-        <div class="game-meta"><span>Animals</span><span>Arcade</span></div>
-      </div>
-    </div>
-
-    <div class="game-card" onclick="openGame('money')">
-      <button class="fav">♡</button>
-      <div class="game-art">🪙</div>
-      <div class="game-info">
-        <div class="game-name">Money Coming</div>
-        <div class="game-meta"><span>Coins</span><span>No Cash Value</span></div>
-      </div>
-    </div>
-
-    <div class="game-card" onclick="openGame('live')">
-      <button class="fav">♡</button>
-      <div class="game-art">🎥</div>
-      <div class="game-info">
-        <div class="game-name">Live Table Demo</div>
-        <div class="game-meta"><span>Dealer Style</span><span>Simulation</span></div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<section class="section">
-
-  <div class="section-head">
-    <h2>📢 Promotions</h2>
-  </div>
-
-  <div class="promo">
-    <h3>🎁 Welcome Bonus</h3>
-    <p>
-      Every new profile starts with 2,000 virtual Diamonds.
-      Diamonds are used only for in-site game access, unlocks and cosmetics.
-    </p>
-  </div>
+<div class="panel" style="margin-top:12px">
+ <b>🤝 Sponsor With Us</b>
+ <p class="muted small">
+ Want to sponsor SPIN FREE? Contact us.
+ </p>
+ <button class="dark" onclick="showPage('profile')">
+ Contact / Support
+ </button>
+</div>
 
 </section>
 
-<section class="section">
 
-  <div class="section-head">
-    <h2>🤝 Sponsor With Us</h2>
-  </div>
+<!-- GAMES -->
+<section id="games" class="page">
+<h2>🎮 Games Hub</h2>
+<div id="gamesGrid" class="grid"></div>
+</section>
 
-  <div class="sponsor">
-    <h3>Grow With SPIN FREE</h3>
-    <p>
-      Want your brand or creative project featured inside our arcade?
-      Contact us for sponsorship opportunities.
-    </p>
-    <button class="sponsor-btn" onclick="contactSponsor()">
-      Sponsor With Us
-    </button>
-  </div>
+
+<!-- LEADERBOARD -->
+<section id="leaderboard" class="page">
+
+<h2>🏆 Weekly Leaderboard</h2>
+
+<div class="panel">
+ <ol id="leaders"></ol>
+ <p class="notice">
+ Weekly score competition. Demo names are simulated opponents.
+ </p>
+</div>
 
 </section>
 
-<section class="section">
 
-  <div class="section-head">
-    <h2>📩 Contact</h2>
-  </div>
+<!-- PROFILE -->
+<section id="profile" class="page">
 
-  <div class="contact">
+<h2>👤 Profile & Support</h2>
 
-    <a href="https://www.instagram.com/deepak__redhu_offical"
-       target="_blank" rel="noopener">
-      📸<br>Instagram
-    </a>
+<div class="panel">
+ <b>Guest Player</b>
+ <p class="muted small">
+ Your demo score is stored locally on this device.
+ </p>
+</div>
 
-    <a href="https://youtube.com/@aicreatorwithdadaji"
-       target="_blank" rel="noopener">
-      ▶️<br>YouTube
-    </a>
+<div class="panel">
 
-    <a href="https://t.me/Iamtrader0017"
-       target="_blank" rel="noopener">
-      ✈️<br>Telegram
-    </a>
+<h3>🤝 Sponsor With Us</h3>
 
-  </div>
+<p class="muted">
+For sponsorship and collaboration contact us.
+</p>
+
+<div class="toolbar">
+
+<a href="https://www.instagram.com/deepak__redhu_offical"
+target="_blank">
+<button class="dark">📸 Instagram</button>
+</a>
+
+<a href="https://youtube.com/@aicreatorwithdadaji"
+target="_blank">
+<button class="dark">▶ YouTube</button>
+</a>
+
+<button class="dark"
+onclick="alert('Add your Telegram username/link here.')">
+✈ Telegram
+</button>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<h3>💬 Feedback</h3>
+
+<textarea id="feedback"
+placeholder="Tell us what to improve..."></textarea>
+
+<br><br>
+
+<button class="gold" onclick="sendFeedback()">
+Send Feedback
+</button>
+
+</div>
+
+</section>
+
+
+<!-- GAME PAGE -->
+<section id="game" class="page">
+
+<button class="dark" onclick="showPage('home')">
+← Back
+</button>
+
+<div id="gameContent"></div>
 
 </section>
 
 </main>
 
-<!-- GAME MODAL -->
-<div class="modal" id="gameModal">
 
-  <div class="modal-box">
+<nav>
 
-    <div class="modal-head">
-      <h2 id="modalTitle">Game</h2>
-      <button class="close" onclick="closeGame()">×</button>
-    </div>
+<button id="nav-home"
+class="active"
+onclick="showPage('home')">
+🏠<br>Home
+</button>
 
-    <div class="game-screen" id="gameScreen"></div>
+<button id="nav-games"
+onclick="showPage('games')">
+🎮<br>Games
+</button>
 
-  </div>
+<button id="nav-leaderboard"
+onclick="showPage('leaderboard')">
+🏆<br>Leaderboard
+</button>
 
-</div>
-
-<!-- WALLET MODAL -->
-<div class="modal" id="walletModal">
-
-  <div class="modal-box">
-
-    <div class="modal-head">
-      <h2>💎 Diamond Wallet</h2>
-      <button class="close" onclick="closeWallet()">×</button>
-    </div>
-
-    <div class="wallet-box">
-
-      <div class="wallet-balance">
-        💎 <span id="walletCount">2000</span>
-      </div>
-
-      <div class="wallet-note">
-        Diamonds are virtual only. They cannot be withdrawn,
-        converted to cash or used for real-money betting.
-      </div>
-
-      <div class="pack-grid">
-
-        <div class="pack">
-          💎 <b>100 Diamonds</b>
-          <small>Virtual pack</small>
-        </div>
-
-        <div class="pack">
-          💎 <b>500 Diamonds</b>
-          <small>Virtual pack</small>
-        </div>
-
-        <div class="pack">
-          💎 <b>2,000 Diamonds</b>
-          <small>Virtual pack</small>
-        </div>
-
-        <div class="pack">
-          💎 <b>10,000 Diamonds</b>
-          <small>Virtual pack</small>
-        </div>
-
-      </div>
-
-      <div class="coming">
-        Paid Diamond purchases will require a compliant payment setup.
-        This demo does not process payments.
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-<div id="toast"></div>
-
-<nav class="bottom-nav">
-
-  <button class="nav-btn active" onclick="home()">
-    <span>🏠</span>Home
-  </button>
-
-  <button class="nav-btn" onclick="goGames()">
-    <span>🎮</span>Games
-  </button>
-
-  <button class="nav-btn" onclick="showPromo()">
-    <span>📢</span>Promo
-  </button>
-
-  <button class="nav-btn" onclick="showWallet()">
-    <span>💎</span>Wallet
-  </button>
-
-  <button class="nav-btn" onclick="showProfile()">
-    <span>👤</span>Profile
-  </button>
+<button id="nav-profile"
+onclick="showPage('profile')">
+👤<br>Profile
+</button>
 
 </nav>
 
+</div>
+
+
 <script>
 
-/* BASIC DATA */
+let points =
+ Number(localStorage.getItem("sfPoints") || 2000);
 
-let diamonds =
-Number(localStorage.getItem("spinFreeDiamonds"));
+let score =
+ Number(localStorage.getItem("sfScore") || 0);
 
-if(!Number.isFinite(diamonds)){
-  diamonds=2000;
-  localStorage.setItem("spinFreeDiamonds",diamonds);
-}
+let audioCtx = null;
 
-let currentUser=null;
-let soundOn=true;
 
-const diamondCount=
-document.getElementById("diamondCount");
+function save(){
 
-const walletCount=
-document.getElementById("walletCount");
+ localStorage.setItem("sfPoints",points);
+ localStorage.setItem("sfScore",score);
 
-function updateDiamonds(){
-
-  diamondCount.textContent=diamonds;
-  walletCount.textContent=diamonds;
-
-  localStorage.setItem(
-    "spinFreeDiamonds",
-    diamonds
-  );
-}
-
-updateDiamonds();
-
-/* LOADING */
-
-window.addEventListener("load",()=>{
-
-  setTimeout(()=>{
-    document.getElementById("loader")
-      .classList.add("hide");
-  },900);
-
-});
-
-/* TOAST */
-
-let toastTimer;
-
-function toast(text){
-
-  const t=document.getElementById("toast");
-
-  t.textContent=text;
-  t.classList.add("show");
-
-  clearTimeout(toastTimer);
-
-  toastTimer=setTimeout(()=>{
-    t.classList.remove("show");
-  },2200);
+ document.getElementById("points")
+ .textContent=points;
 
 }
 
-/* SOUND */
 
-let audio=null;
+function sound(freq=440,duration=.08){
 
-function sound(freq=440,duration=.12){
+ try{
 
-  if(!soundOn)return;
+  if(!audioCtx){
 
-  try{
-
-    const AC=
-      window.AudioContext ||
-      window.webkitAudioContext;
-
-    if(!audio) audio=new AC();
-
-    if(audio.state==="suspended")
-      audio.resume();
-
-    const osc=audio.createOscillator();
-    const gain=audio.createGain();
-
-    osc.type="sine";
-    osc.frequency.value=freq;
-
-    gain.gain.setValueAtTime(
-      .05,
-      audio.currentTime
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-      .001,
-      audio.currentTime+duration
-    );
-
-    osc.connect(gain);
-    gain.connect(audio.destination);
-
-    osc.start();
-    osc.stop(audio.currentTime+duration);
-
-  }catch(e){}
-
-}
-
-function toggleSound(){
-
-  soundOn=!soundOn;
-
-  toast(
-    soundOn
-    ? "🔊 Sound ON"
-    : "🔇 Sound OFF"
-  );
-
-}
-
-/* NAVIGATION */
-
-function home(){
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
-}
-
-function goGames(){
-
-  document.getElementById("gamesSection")
-    .scrollIntoView({
-      behavior:"smooth"
-    });
-
-}
-
-function showPromo(){
-
-  const el=document.querySelector(".promo");
-
-  el.scrollIntoView({
-    behavior:"smooth"
-  });
-
-}
-
-function showWallet(){
-
-  document.getElementById("walletModal")
-    .classList.add("show");
-
-}
-
-function closeWallet(){
-
-  document.getElementById("walletModal")
-    .classList.remove("show");
-
-}
-
-function showProfile(){
-
-  const name=
-    currentUser?.displayName ||
-    currentUser?.email ||
-    "Guest";
-
-  document.getElementById("modalTitle")
-    .textContent="Profile";
-
-  document.getElementById("gameScreen").innerHTML=`
-
-    <div class="profile">
-
-      <div class="profile-avatar">👤</div>
-
-      <h2>${escapeHTML(name)}</h2>
-
-      <p>
-        ${currentUser?.phoneNumber || "Guest account"}
-      </p>
-
-      <h3>💎 ${diamonds} Diamonds</h3>
-
-      <button class="action"
-        onclick="toggleSound()">
-        ${soundOn ? "🔊 Sound ON" : "🔇 Sound OFF"}
-      </button>
-
-    </div>
-
-  `;
-
-  document.getElementById("gameModal")
-    .classList.add("show");
-
-}
-
-function escapeHTML(text){
-
-  return String(text)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
-
-/* LOGIN */
-
-document.getElementById("googleBtn")
-.addEventListener("click",async()=>{
-
-  if(!window.firebaseAuth){
-    toast("Firebase is still loading...");
-    return;
-  }
-
-  try{
-
-    const result=
-      await window.firebaseAuth.signInWithPopup(
-        window.firebaseAuth.auth,
-        window.firebaseAuth.googleProvider
-      );
-
-    currentUser=result.user;
-
-    toast("Welcome to SPIN FREE 🎉");
-
-  }catch(error){
-
-    console.error(error);
-
-    toast(
-      error.code==="auth/popup-closed-by-user"
-      ? "Login cancelled"
-      : "Google login failed"
-    );
+   audioCtx =
+   new(window.AudioContext ||
+   window.webkitAudioContext)();
 
   }
 
-});
+  const osc =
+  audioCtx.createOscillator();
 
-document.getElementById("logoutBtn")
-.addEventListener("click",async()=>{
+  const gain =
+  audioCtx.createGain();
 
-  try{
+  osc.type="triangle";
 
-    await window.firebaseAuth.signOut(
-      window.firebaseAuth.auth
-    );
+  osc.frequency.value=freq;
 
-    currentUser=null;
+  gain.gain.value=.04;
 
-    toast("Logged out");
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
 
-  }catch(error){
+  osc.start();
 
-    toast("Logout failed");
-
-  }
-
-});
-
-/* AUTH STATE */
-
-if(window.firebaseAuth){
-
-  window.firebaseAuth.onAuthStateChanged(
-    window.firebaseAuth.auth,
-    user=>{
-
-      currentUser=user;
-
-      const loginArea=
-        document.getElementById("loginArea");
-
-      const googleBtn=
-        document.getElementById("googleBtn");
-
-      const logoutBtn=
-        document.getElementById("logoutBtn");
-
-      const mini=
-        document.getElementById("miniUser");
-
-      if(user){
-
-        googleBtn.style.display="none";
-        logoutBtn.style.display="block";
-
-        mini.innerHTML=`
-          <div class="avatar">👤</div>
-          <span>${escapeHTML(
-            user.displayName ||
-            user.email ||
-            "User"
-          )}</span>
-        `;
-
-        loginArea.querySelector("h2")
-          .textContent="You're signed in ✓";
-
-        loginArea.querySelector("p")
-          .textContent=
-          "Your SPIN FREE profile is active.";
-
-      }else{
-
-        googleBtn.style.display="block";
-        logoutBtn.style.display="none";
-
-        mini.innerHTML=`
-          <div class="avatar">👤</div>
-          <span>Guest</span>
-        `;
-
-      }
-
-    }
+  gain.gain.exponentialRampToValueAtTime(
+   .001,
+   audioCtx.currentTime+duration
   );
 
-}
-
-/* PHONE LOGIN */
-
-async function phoneLogin(){
-
-  toast(
-    "Phone login requires Firebase reCAPTCHA setup."
+  osc.stop(
+   audioCtx.currentTime+duration
   );
 
-  /*
-    Firebase Phone Auth intentionally isn't auto-triggered here.
-    Enable Phone provider in Firebase Authentication and configure
-    the GitHub Pages domain first.
-  */
+ }catch(e){}
 
 }
 
-/* SPONSOR */
 
-function contactSponsor(){
+function showPage(id){
 
-  window.open(
-    "https://t.me/Iamtrader0017",
-    "_blank"
-  );
+ document
+ .querySelectorAll(".page")
+ .forEach(p=>p.classList.remove("active"));
 
-}
+ document
+ .getElementById(id)
+ .classList.add("active");
 
-/* GAME MODAL */
+ document
+ .querySelectorAll("nav button")
+ .forEach(b=>b.classList.remove("active"));
 
-function openGame(type){
+ const nav=
+ document.getElementById("nav-"+id);
 
-  document.getElementById("gameModal")
-    .classList.add("show");
+ if(nav)nav.classList.add("active");
 
-  const screen=
-    document.getElementById("gameScreen");
+ window.scrollTo(0,0);
 
-  const titles={
-    slot:"🎰 Royal Slots",
-    flight:"✈️ Flight Arcade",
-    ludo:"🎲 Ludo",
-    mines:"💣 Mines",
-    rummy:"🃏 Rummy Table",
-    roulette:"🎡 Royal Roulette",
-    bottle:"🍾 Bottle Shooting",
-    memory:"🃏 Memory Cards",
-    dragon:"🐯 Dragon & Tiger",
-    zoo:"🦁 SPIN ZOO",
-    money:"🪙 Money Coming",
-    live:"🎥 Live Table Demo"
-  };
+ if(id==="games")
+ renderGames();
 
-  document.getElementById("modalTitle")
-    .textContent=titles[type] || "SPIN FREE";
-
-  if(type==="slot") slotGame(screen);
-  if(type==="flight") flightGame(screen);
-  if(type==="ludo") ludoGame(screen);
-  if(type==="mines") minesGame(screen);
-  if(type==="rummy") rummyGame(screen);
-  if(type==="roulette") rouletteGame(screen);
-  if(type==="bottle") bottleGame(screen);
-  if(type==="memory") memoryGame(screen);
-  if(type==="dragon") dragonGame(screen);
-  if(type==="zoo") zooGame(screen);
-  if(type==="money") moneyGame(screen);
-  if(type==="live") liveGame(screen);
+ if(id==="leaderboard")
+ renderLeaderboard();
 
 }
 
-function closeGame(){
 
-  document.getElementById("gameModal")
-    .classList.remove("show");
+function openGame(name){
 
-}
+ showPage("game");
 
-/* SLOT */
+ const box=
+ document.getElementById("gameContent");
 
-function slotGame(el){
-
-  const symbols=["🍒","🍋","🔔","⭐","💎","7️⃣"];
-
-  el.innerHTML=`
-
-    <div class="game-title">
-      Royal Slots
-    </div>
-
-    <div class="reels">
-      <div class="reel" id="r1">🍒</div>
-      <div class="reel" id="r2">⭐</div>
-      <div class="reel" id="r3">💎</div>
-    </div>
-
-    <div class="game-controls">
-
-      <button class="action" onclick="spinSlot()">
-        SPIN
-      </button>
-
-      <button class="action secondary"
-        onclick="toggleSound()">
-        🔊 / 🔇
-      </button>
-
-    </div>
-
-    <div class="game-result" id="slotResult">
-      Free-play arcade mode
-    </div>
-  `;
-
-  window.slotSymbols=symbols;
+ if(name==="ludo")ludo(box);
+ if(name==="mines")mines(box);
+ if(name==="slots")slots(box);
+ if(name==="rummy")rummy(box);
+ if(name==="patti")patti(box);
+ if(name==="dvt")dragonTiger(box);
+ if(name==="bottle")bottle(box);
+ if(name==="flight")flight(box);
 
 }
 
-function spinSlot(){
 
-  const s=window.slotSymbols;
+function dailyBonus(){
 
-  const a=s[Math.floor(Math.random()*s.length)];
-  const b=s[Math.floor(Math.random()*s.length)];
-  const c=s[Math.floor(Math.random()*s.length)];
+ const today=
+ new Date().toDateString();
 
-  document.getElementById("r1").textContent=a;
-  document.getElementById("r2").textContent=b;
-  document.getElementById("r3").textContent=c;
+ if(
+ localStorage.getItem("sfBonus")===today
+ ){
 
-  sound(520,.08);
+  alert("Daily bonus already collected.");
+  return;
 
-  document.getElementById("slotResult")
-    .textContent=
-    a===b && b===c
-    ? "✨ Perfect match!"
-    : "Spin complete • No wagering";
+ }
 
-}
+ points+=250;
 
-/* FLIGHT */
+ localStorage.setItem(
+ "sfBonus",
+ today
+ );
 
-let flightTimer=null;
-let flightRunning=false;
-let flightValue=1;
+ save();
 
-function flightGame(el){
+ sound(880,.2);
 
-  el.innerHTML=`
-
-    <div class="flight">
-
-      <div class="flight-multi">
-        <span id="flightValue">1.00</span>x
-      </div>
-
-      <div class="flight-line" id="flightLine"></div>
-
-      <div class="flight-plane" id="flightPlane">
-        ✈️
-      </div>
-
-    </div>
-
-    <div class="game-controls">
-
-      <button class="action"
-        onclick="startDemoFlight()">
-        START FLIGHT
-      </button>
-
-      <button class="action secondary"
-        onclick="toggleSound()">
-        🔊 / 🔇
-      </button>
-
-    </div>
-
-    <div class="game-result" id="flightResult">
-      Non-betting arcade simulation
-    </div>
-  `;
+ alert("+250 virtual points!");
 
 }
 
-function startDemoFlight(){
 
-  if(flightRunning)return;
+/* ================= LUDO ================= */
 
-  flightRunning=true;
-  flightValue=1;
+function ludo(box){
 
-  const crash=
-    1.5+Math.random()*5;
+ let positions=[0,0,0,0];
+ let turn=true;
 
-  const started=performance.now();
+ box.innerHTML=`
 
-  clearInterval(flightTimer);
+ <div class="panel">
 
-  function loop(now){
+ <div class="tag">4 PLAYER FREE PLAY</div>
 
-    if(!flightRunning)return;
+ <h2>🎲 LUDO</h2>
 
-    const seconds=
-      (now-started)/1000;
+ <p class="muted">
+ You vs 3 demo bots
+ </p>
 
-    flightValue=
-      1+
-      seconds*.5+
-      seconds*seconds*.02;
+ <div class="dice" id="dice">⚀</div>
 
-    const progress=
-      Math.min(
-        (flightValue-1)/(crash-1),
-        1
-      );
+ <div class="board" id="ludoBoard"></div>
 
-    document.getElementById("flightValue")
-      .textContent=
-      flightValue.toFixed(2);
+ <div class="row">
 
-    document.getElementById("flightLine")
-      .style.width=
-      (progress*78)+"%";
+ <button class="gold"
+ id="rollButton"
+ onclick="rollDice()">
+ ROLL DICE
+ </button>
 
-    document.getElementById("flightPlane")
-      .style.left=
-      (8+progress*75)+"%";
+ </div>
 
-    if(flightValue>=crash){
+ <p class="muted" id="ludoMessage">
+ Your turn.
+ </p>
 
-      flightRunning=false;
+ </div>
 
-      document.getElementById("flightResult")
-        .textContent=
-        "Flight ended at "+
-        flightValue.toFixed(2)+"x";
+ `;
 
-      sound(130,.25);
+ const board=
+ document.getElementById("ludoBoard");
 
-      return;
+ for(let i=0;i<121;i++){
 
-    }
+  const cell=
+  document.createElement("div");
 
-    requestAnimationFrame(loop);
+  cell.className=
+  "cell "+(i%13===0?"safe":"");
 
-  }
+  board.appendChild(cell);
 
-  requestAnimationFrame(loop);
+ }
 
-}
+ drawTokens();
 
-/* LUDO */
 
-function ludoGame(el){
+ window.rollDice=function(){
 
-  let cells="";
-
-  for(let i=0;i<36;i++){
-
-    cells+=`
-      <div class="ludo-cell">
-        ${i===0?"🔴":i===35?"🏁":""}
-      </div>
-    `;
-
-  }
-
-  el.innerHTML=`
-
-    <div class="game-title">🎲 Ludo</div>
-
-    <div class="ludo-board">
-      ${cells}
-    </div>
-
-    <div class="game-controls">
-
-      <button class="action"
-        onclick="rollDice()">
-        🎲 ROLL DICE
-      </button>
-
-      <button class="action secondary"
-        onclick="toggleSound()">
-        🔊 / 🔇
-      </button>
-
-    </div>
-
-    <div class="game-result" id="diceResult">
-      Practice mode
-    </div>
-  `;
-
-}
-
-function rollDice(){
+  if(!turn)return;
 
   const n=
-    Math.floor(Math.random()*6)+1;
+  Math.floor(Math.random()*6)+1;
 
-  sound(350,.1);
+  document.getElementById("dice")
+  .textContent=
+  ["⚀","⚁","⚂","⚃","⚄","⚅"][n-1];
 
-  document.getElementById("diceResult")
-    .textContent=
-    "You rolled "+n+" 🎲";
+  positions[0]=
+  Math.min(40,positions[0]+n);
 
-}
+  sound(550,.12);
 
-/* MINES */
+  drawTokens();
 
-function minesGame(el){
+  document.getElementById("ludoMessage")
+  .textContent=
+  "You rolled "+n+". Bots are moving...";
 
-  let html="";
-
-  for(let i=0;i<25;i++){
-
-    html+=`
-      <button class="mine"
-        onclick="revealMine(this)">
-        ?
-      </button>
-    `;
-
-  }
-
-  el.innerHTML=`
-
-    <div class="game-title">💣 Mines Puzzle</div>
-
-    <div class="mine-grid">
-      ${html}
-    </div>
-
-    <div class="game-result">
-      Puzzle mode • no wagering
-    </div>
-  `;
-
-}
-
-function revealMine(btn){
-
-  if(btn.dataset.open)return;
-
-  btn.dataset.open="1";
-
-  const safe=Math.random()>.22;
-
-  btn.textContent=
-    safe?"💎":"💥";
-
-  sound(safe?650:120,.1);
-
-}
-
-/* RUMMY */
-
-function rummyGame(el){
-
-  el.innerHTML=`
-
-    <div class="game-title">🃏 Rummy Practice Table</div>
-
-    <div class="dragon-table">
-
-      <div class="side">
-        <b>🃏</b>
-        Your Hand
-      </div>
-
-      <div class="side">
-        <b>🎴</b>
-        Deck
-      </div>
-
-    </div>
-
-    <div class="game-controls">
-
-      <button class="action"
-        onclick="dealCards()">
-        DEAL CARDS
-      </button>
-
-      <button class="action secondary"
-        onclick="toggleSound()">
-        🔊 / 🔇
-      </button>
-
-    </div>
-
-    <div class="game-result" id="rummyResult">
-      Practice mode
-    </div>
-  `;
-
-}
-
-function dealCards(){
-
-  sound(480,.1);
-
-  document.getElementById("rummyResult")
-    .textContent=
-    "Cards dealt • Practice table";
-
-}
-
-/* ROULETTE */
-
-function rouletteGame(el){
-
-  el.innerHTML=`
-
-    <div class="game-title">🎡 Royal Roulette</div>
-
-    <div style="
-      width:180px;
-      height:180px;
-      margin:25px auto;
-      border:12px solid #252525;
-      border-radius:50%;
-      display:grid;
-      place-items:center;
-      background:conic-gradient(
-        #111 0 12deg,
-        #b21f2d 12deg 24deg,
-        #111 24deg 36deg,
-        #b21f2d 36deg 48deg,
-        #111 48deg 60deg,
-        #b21f2d 60deg 72deg,
-        #111 72deg 84deg,
-        #b21f2d 84deg 96deg,
-        #111 96deg 108deg,
-        #b21f2d 108deg 120deg,
-        #111 120deg 132deg,
-        #b21f2d 132deg 144deg,
-        #111 144deg 156deg,
-        #b21f2d 156deg 168deg,
-        #111 168deg 180deg,
-        #b21f2d 180deg 192deg,
-        #111 192deg 204deg,
-        #b21f2d 204deg 216deg,
-        #111 216deg 228deg,
-        #b21f2d 228deg 240deg,
-        #111 240deg 252deg,
-        #b21f2d 252deg 264deg,
-        #111 264deg 276deg,
-        #b21f2d 276deg 288deg,
-        #111 288deg 300deg,
-        #b21f2d 300deg 312deg,
-        #111 312deg 324deg,
-        #b21f2d 324deg 336deg,
-        #111 336deg 360deg
-      );
-      transition:transform 1.5s;
-    " id="rouletteWheel">
-      <span style="
-        width:55px;
-        height:55px;
-        display:grid;
-        place-items:center;
-        border-radius:50%;
-        background:#0b0b0b;
-      ">🎡</span>
-    </div>
-
-    <div class="game-controls">
-
-      <button class="action"
-        onclick="spinRoulette()">
-        SPIN WHEEL
-      </button>
-
-      <button class="action secondary"
-        onclick="toggleSound()">
-        🔊 / 🔇
-      </button>
-
-    </div>
-
-    <div class="game-result" id="rouletteResult">
-      Demo entertainment mode
-    </div>
-  `;
-
-}
-
-function spinRoulette(){
-
-  const wheel=
-    document.getElementById("rouletteWheel");
-
-  const deg=
-    720+Math.floor(Math.random()*720);
-
-  wheel.style.transform=
-    "rotate("+deg+"deg)";
-
-  sound(400,.1);
+  turn=false;
 
   setTimeout(()=>{
 
-    const n=
-      Math.floor(Math.random()*37);
+   for(let i=1;i<4;i++){
 
-    document.getElementById("rouletteResult")
-      .textContent=
-      "Wheel result: "+n+
-      " • No wager";
+    positions[i]=
+    Math.min(
+     40,
+     positions[i]+
+     Math.floor(Math.random()*6)+1
+    );
 
-  },1500);
+   }
 
-}
+   drawTokens();
 
-/* BOTTLE */
+   if(positions[0]>=40){
 
-function bottleGame(el){
+    score+=100;
 
-  el.innerHTML=`
+    save();
 
-    <div class="game-title">🍾 Bottle Shooting</div>
-
-    <div class="bottle-area">
-
-      <div class="bottle" id="bottle">🍾</div>
-
-      <div class="target" id="target">🎯</div>
-
-    </div>
-
-    <div class="game-controls">
-
-      <button class="action"
-        onclick="shootBottle()">
-        🎯 SHOOT
-      </button>
-
-      <button class="action secondary"
-        onclick="toggleSound()">
-        🔊 / 🔇
-      </button>
-
-    </div>
-
-    <div class="game-result" id="bottleResult">
-      Hit the bottle!
-    </div>
-  `;
-
-}
-
-function shootBottle(){
-
-  const b=
-    document.getElementById("bottle");
-
-  b.style.transform=
-    "translateY(-35px) rotate(25deg)";
-
-  sound(720,.08);
-
-  setTimeout(()=>{
-
-    b.style.transform="";
-
-  },250);
-
-  document.getElementById("bottleResult")
+    document.getElementById("ludoMessage")
     .textContent=
-    "🎯 Great shot!";
+    "🏆 You reached home! +100 score";
 
-}
+   }else{
 
-/* MEMORY */
+    document.getElementById("ludoMessage")
+    .textContent=
+    "Your turn.";
 
-let memoryFirst=null;
-let memoryLock=false;
+   }
 
-function memoryGame(el){
+   turn=true;
 
-  const icons=[
-    "🍎","🍎","⭐","⭐",
-    "💎","💎","🐯","🐯"
-  ].sort(()=>Math.random()-.5);
+  },700);
 
-  let html="";
+ };
 
-  icons.forEach((x,i)=>{
 
-    html+=`
-      <button class="memory"
-        data-value="${x}"
-        onclick="memoryPick(this)">
-        ?
-      </button>
-    `;
+ function drawTokens(){
+
+  [...board.children]
+  .forEach(c=>c.innerHTML="");
+
+  const colors=[
+   "#e05252",
+   "#56c596",
+   "#f3c858",
+   "#6da8ff"
+  ];
+
+  positions.forEach((p,i)=>{
+
+   const index=
+   (p*3+i*17)%121;
+
+   const token=
+   document.createElement("div");
+
+   token.className="token";
+
+   token.style.background=
+   colors[i];
+
+   token.textContent=
+   i===0?"YOU":"BOT";
+
+   board.children[index]
+   .appendChild(token);
 
   });
 
-  memoryFirst=null;
-  memoryLock=false;
-
-  el.innerHTML=`
-
-    <div class="game-title">🃏 Memory Cards</div>
-
-    <div class="memory-grid">
-      ${html}
-    </div>
-
-    <div class="game-result">
-      Match the pairs
-    </div>
-  `;
+ }
 
 }
 
-function memoryPick(btn){
 
-  if(memoryLock)return;
-  if(btn.dataset.done)return;
-  if(btn===memoryFirst)return;
+/* ================= MINES ================= */
 
-  btn.textContent=btn.dataset.value;
+function mines(box){
 
-  if(!memoryFirst){
+ let minesSet=new Set();
 
-    memoryFirst=btn;
-    sound(500,.08);
-    return;
+ while(minesSet.size<6)
+ minesSet.add(
+  Math.floor(Math.random()*25)
+ );
 
-  }
+ let safe=0;
 
-  if(memoryFirst.dataset.value===btn.dataset.value){
+ box.innerHTML=`
 
-    memoryFirst.dataset.done="1";
-    btn.dataset.done="1";
+ <div class="panel">
 
-    sound(800,.12);
+ <div class="tag">SKILL ARCADE</div>
 
-    memoryFirst=null;
+ <h2>💣 MINES</h2>
+
+ <p class="muted">
+ Reveal safe tiles.
+ </p>
+
+ <div class="mines" id="mineGrid"></div>
+
+ <p id="mineMessage"
+ class="muted">
+ Safe tiles: 0
+ </p>
+
+ <button class="gold"
+ onclick="mines(document.getElementById('gameContent'))">
+ NEW ROUND
+ </button>
+
+ </div>
+
+ `;
+
+ const grid=
+ document.getElementById("mineGrid");
+
+ for(let i=0;i<25;i++){
+
+  const button=
+  document.createElement("button");
+
+  button.className="mine";
+
+  button.textContent="?";
+
+  button.onclick=()=>{
+
+   if(button.disabled)return;
+
+   button.disabled=true;
+
+   if(minesSet.has(i)){
+
+    button.textContent="💣";
+
+    document.getElementById("mineMessage")
+    .textContent=
+    "💥 Mine found. Round over.";
+
+    sound(100,.3);
+
+   }else{
+
+    button.textContent="💎";
+
+    safe++;
+
+    score+=5;
+
+    save();
+
+    document.getElementById("mineMessage")
+    .textContent=
+    "Safe tiles: "+safe;
+
+    sound(650,.06);
+
+   }
+
+  };
+
+  grid.appendChild(button);
+
+ }
+
+}
+
+
+/* ================= SLOTS ================= */
+
+function slots(box){
+
+ const symbols=
+ ["🍒","🍋","🔔","⭐","7️⃣","💎"];
+
+ box.innerHTML=`
+
+ <div class="panel">
+
+ <div class="tag">ARCADE REELS</div>
+
+ <h2>🎰 SLOTS</h2>
+
+ <div class="reels">
+
+ <div class="reel" id="r1">❔</div>
+ <div class="reel" id="r2">❔</div>
+ <div class="reel" id="r3">❔</div>
+
+ </div>
+
+ <div class="row">
+
+ <button class="gold"
+ onclick="spinSlots()">
+ SPIN
+ </button>
+
+ <button class="dark"
+ onclick="sound(300,.1)">
+ 🔊 SOUND
+ </button>
+
+ </div>
+
+ <p class="muted" id="slotMessage">
+ Match symbols for score.
+ </p>
+
+ </div>
+
+ `;
+
+
+ window.spinSlots=function(){
+
+  let count=0;
+
+  const timer=
+  setInterval(()=>{
+
+   let a=
+   Math.floor(Math.random()*symbols.length);
+
+   let b=
+   Math.floor(Math.random()*symbols.length);
+
+   let c=
+   Math.floor(Math.random()*symbols.length);
+
+   document.getElementById("r1")
+   .textContent=symbols[a];
+
+   document.getElementById("r2")
+   .textContent=symbols[b];
+
+   document.getElementById("r3")
+   .textContent=symbols[c];
+
+   sound(300,.04);
+
+   count++;
+
+   if(count>12){
+
+    clearInterval(timer);
+
+    const msg=
+    document.getElementById("slotMessage");
+
+    if(a===b && b===c){
+
+     score+=100;
+
+     msg.textContent=
+     "🎉 Perfect match! +100 score";
+
+     sound(900,.2);
+
+    }else if(a===b || b===c){
+
+     score+=25;
+
+     msg.textContent=
+     "Nice match! +25 score";
+
+    }else{
+
+     msg.textContent=
+     "No match. Try again.";
+
+    }
+
+    save();
+
+   }
+
+  },70);
+
+ };
+
+}
+
+
+/* ================= RUMMY ================= */
+
+function rummy(box){
+
+ const deck=[
+ "A♠","K♥","Q♦","J♣",
+ "10♠","9♥","8♦","7♣",
+ "6♠","5♥","4♦","3♣"
+ ];
+
+ box.innerHTML=`
+
+ <div class="panel">
+
+ <div class="tag">
+ FREE PLAY CARD BATTLE
+ </div>
+
+ <h2>🃏 RUMMY STYLE</h2>
+
+ <div class="row">
+ YOU ⚔ BOT ARJUN
+ </div>
+
+ <div class="cards" id="rummyCards"></div>
+
+ <div class="row">
+
+ <button class="gold"
+ onclick="dealRummy()">
+ DEAL CARDS
+ </button>
+
+ </div>
+
+ <p class="muted" id="rummyMessage">
+ Beat the demo bot for score.
+ </p>
+
+ </div>
+
+ `;
+
+
+ window.dealRummy=function(){
+
+  const shuffled=
+  [...deck].sort(()=>Math.random()-.5);
+
+  const hand=
+  shuffled.slice(0,3);
+
+  document.getElementById("rummyCards")
+  .innerHTML=
+  hand.map(card=>
+  `<div class="playing">${card}</div>`
+  ).join("");
+
+  const win=
+  Math.random()>.45;
+
+  if(win){
+
+   score+=60;
+
+   document.getElementById("rummyMessage")
+   .textContent=
+   "🏆 You beat the bot! +60 score";
 
   }else{
 
-    memoryLock=true;
-
-    const first=memoryFirst;
-
-    setTimeout(()=>{
-
-      first.textContent="?";
-      btn.textContent="?";
-
-      memoryFirst=null;
-      memoryLock=false;
-
-    },600);
+   document.getElementById("rummyMessage")
+   .textContent=
+   "Bot wins this round.";
 
   }
 
-}
-
-/* DRAGON TIGER */
-
-function dragonGame(el){
-
-  el.innerHTML=`
-
-    <div class="game-title">
-      🐯 Dragon & Tiger Skill
-    </div>
-
-    <div class="dragon-table">
-
-      <div class="side">
-        <b>🐉</b>
-        Dragon
-        <span id="dragonCard">?</span>
-      </div>
-
-      <div class="side">
-        <b>🐯</b>
-        Tiger
-        <span id="tigerCard">?</span>
-      </div>
-
-    </div>
-
-    <div class="game-controls">
-
-      <button class="action"
-        onclick="dealDragonTiger()">
-        DEAL
-      </button>
-
-      <button class="action secondary"
-        onclick="toggleSound()">
-        🔊 / 🔇
-      </button>
-
-    </div>
-
-    <div class="game-result" id="dragonResult">
-      Prediction-free practice mode
-    </div>
-  `;
-
-}
-
-function dealDragonTiger(){
-
-  const cards=[
-    "A","2","3","4","5",
-    "6","7","8","9","10",
-    "J","Q","K"
-  ];
-
-  const d=
-    cards[Math.floor(Math.random()*cards.length)];
-
-  const t=
-    cards[Math.floor(Math.random()*cards.length)];
-
-  document.getElementById("dragonCard")
-    .textContent=d;
-
-  document.getElementById("tigerCard")
-    .textContent=t;
-
-  document.getElementById("dragonResult")
-    .textContent=
-    "Cards dealt • No prediction or wager";
-
-  sound(600,.1);
-
-}
-
-/* ZOO */
-
-function zooGame(el){
-
-  const animals=[
-    "🦁","🐯","🐼","🐘",
-    "🦒","🦓","🐊","🦜"
-  ];
-
-  el.innerHTML=`
-
-    <div class="game-title">🦁 SPIN ZOO</div>
-
-    <div style="
-      text-align:center;
-      font-size:75px;
-      margin:35px 0;
-    " id="zooAnimal">
-      🦁
-    </div>
-
-    <div class="game-controls">
-
-      <button class="action"
-        onclick='spinZoo(${JSON.stringify(animals)})'>
-        SPIN ZOO
-      </button>
-
-      <button class="action secondary"
-        onclick="toggleSound()">
-        🔊 / 🔇
-      </button>
-
-    </div>
-
-    <div class="game-result">
-      Animal arcade mode
-    </div>
-  `;
-
-}
-
-function spinZoo(animals){
-
-  const a=
-    animals[Math.floor(Math.random()*animals.length)];
-
-  document.getElementById("zooAnimal")
-    .textContent=a;
-
-  sound(500,.1);
-
-}
-
-/* MONEY COMING */
-
-function moneyGame(el){
-
-  el.innerHTML=`
-
-    <div class="game-title">🪙 Money Coming</div>
-
-    <div style="
-      text-align:center;
-      font-size:75px;
-      margin:35px 0;
-    " id="coin">
-      🪙
-    </div>
-
-    <div class="game-controls">
-
-      <button class="action"
-        onclick="collectCoins()">
-        COLLECT COINS
-      </button>
-
-      <button class="action secondary"
-        onclick="toggleSound()">
-        🔊 / 🔇
-      </button>
-
-    </div>
-
-    <div class="game-result" id="coinResult">
-      Virtual coins only • No cash value
-    </div>
-  `;
-
-}
-
-function collectCoins(){
-
-  document.getElementById("coin")
-    .textContent="💰";
+  save();
 
   sound(700,.12);
 
-  document.getElementById("coinResult")
+ };
+
+}
+
+
+/* ================= TEEN PATTI ================= */
+
+function patti(box){
+
+ box.innerHTML=`
+
+ <div class="panel">
+
+ <div class="tag">
+ FREE PLAY CARD BATTLE
+ </div>
+
+ <h2>♠️ TEEN PATTI STYLE</h2>
+
+ <p class="muted">
+ You vs Bot Ayaan vs Bot Riya
+ </p>
+
+ <div class="cards" id="pattiCards"></div>
+
+ <div class="row">
+
+ <button class="gold"
+ onclick="dealPatti()">
+ DEAL 3 CARDS
+ </button>
+
+ </div>
+
+ <p class="muted" id="pattiMessage">
+ Score challenge only.
+ </p>
+
+ </div>
+
+ `;
+
+
+ window.dealPatti=function(){
+
+  const cards=[
+   "A♠","K♥","Q♦",
+   "J♣","10♠","9♥",
+   "8♦","7♣","6♠"
+  ];
+
+  const hand=
+  [...cards]
+  .sort(()=>Math.random()-.5)
+  .slice(0,3);
+
+  document.getElementById("pattiCards")
+  .innerHTML=
+  hand.map(x=>
+  `<div class="playing">${x}</div>`
+  ).join("");
+
+  score+=20;
+
+  save();
+
+  document.getElementById("pattiMessage")
+  .textContent=
+  "Round completed! +20 score";
+
+  sound(700,.12);
+
+ };
+
+}
+
+
+/* ================= DRAGON TIGER ================= */
+
+function dragonTiger(box){
+
+ box.innerHTML=`
+
+ <div class="panel">
+
+ <div class="tag">
+ CARD REVEAL ARCADE
+ </div>
+
+ <h2>🐯 DRAGON VS TIGER</h2>
+
+ <div class="cards">
+
+ <div>
+  <div class="playing" id="dragonCard">?</div>
+  <center>DRAGON</center>
+ </div>
+
+ <div>
+  <div class="playing" id="tigerCard">?</div>
+  <center>TIGER</center>
+ </div>
+
+ </div>
+
+ <div class="row">
+
+ <button class="gold"
+ onclick="playDragonTiger()">
+ REVEAL
+ </button>
+
+ </div>
+
+ <p class="muted" id="dtMessage">
+ Free-play card round.
+ </p>
+
+ </div>
+
+ `;
+
+
+ window.playDragonTiger=function(){
+
+  const names=[
+   "A","2","3","4","5","6","7",
+   "8","9","10","J","Q","K"
+  ];
+
+  const d=
+  Math.floor(Math.random()*13);
+
+  const t=
+  Math.floor(Math.random()*13);
+
+  document.getElementById("dragonCard")
+  .textContent=names[d];
+
+  document.getElementById("tigerCard")
+  .textContent=names[t];
+
+  if(d>t){
+
+   score+=30;
+
+   document.getElementById("dtMessage")
+   .textContent=
+   "🐉 Dragon wins! +30 score";
+
+  }else if(t>d){
+
+   score+=30;
+
+   document.getElementById("dtMessage")
+   .textContent=
+   "🐯 Tiger wins! +30 score";
+
+  }else{
+
+   document.getElementById("dtMessage")
+   .textContent=
+   "Tie round.";
+
+  }
+
+  save();
+
+  sound(620,.12);
+
+ };
+
+}
+
+
+/* ================= BOTTLE ================= */
+
+function bottle(box){
+
+ box.innerHTML=`
+
+ <div class="panel">
+
+ <div class="tag">
+ SKILL CHALLENGE
+ </div>
+
+ <h2>🍾 BOTTLE SHOOTING</h2>
+
+ <p class="muted">
+ Tap all five bottles.
+ </p>
+
+ <div class="bottles" id="bottles"></div>
+
+ <p id="bottleMessage"
+ class="muted">
+ Hits: 0 / 5
+ </p>
+
+ <button class="gold"
+ onclick="startBottle()">
+ START
+ </button>
+
+ </div>
+
+ `;
+
+
+ window.startBottle=function(){
+
+  const area=
+  document.getElementById("bottles");
+
+  area.innerHTML="";
+
+  let hits=0;
+
+  for(let i=0;i<5;i++){
+
+   const b=
+   document.createElement("button");
+
+   b.className="bottle";
+
+   b.textContent="🍾";
+
+   b.onclick=()=>{
+
+    if(b.disabled)return;
+
+    b.disabled=true;
+
+    b.classList.add("hit");
+
+    hits++;
+
+    score+=10;
+
+    save();
+
+    document.getElementById("bottleMessage")
     .textContent=
-    "✨ Coins collected! Virtual only.";
+    "Hits: "+hits+" / 5";
+
+    sound(760,.07);
+
+    if(hits===5){
+
+     document.getElementById("bottleMessage")
+     .textContent=
+     "🏆 Perfect! +50 score";
+
+    }
+
+   };
+
+   area.appendChild(b);
+
+  }
+
+ };
 
 }
 
-/* LIVE TABLE DEMO */
 
-function liveGame(el){
+/* ================= FLIGHT ================= */
 
-  el.innerHTML=`
+function flight(box){
 
-    <div class="game-title">
-      🎥 Live Table Demo
-    </div>
+ let running=false;
+ let multiplier=1;
+ let animation;
 
-    <div style="
-      margin-top:20px;
-      height:190px;
-      border-radius:15px;
-      display:grid;
-      place-items:center;
-      text-align:center;
-      background:
-        radial-gradient(circle,#4b3b1533,transparent 45%),
-        #17120a;
-      border:1px solid #3d321c;
-    ">
+ let history=
+ JSON.parse(
+  localStorage.getItem("sfHistory")||"[]"
+ );
 
-      <div>
-        <div style="font-size:65px">🎥</div>
-        <b>LIVE DEALER STYLE</b>
-        <div style="
-          color:#777;
-          font-size:11px;
-          margin-top:7px;
-        ">
-          Simulation / entertainment mode
-        </div>
-      </div>
 
-    </div>
+ box.innerHTML=`
 
-    <div class="game-controls">
+ <div class="panel">
 
-      <button class="action"
-        onclick="toast('Live simulation ready')">
-        ENTER TABLE
-      </button>
+ <div class="tag">
+ VIRTUAL POINTS ONLY
+ </div>
 
-      <button class="action secondary"
-        onclick="toggleSound()">
-        🔊 / 🔇
-      </button>
+ <h2>✈️ FLIGHT ARCADE</h2>
 
-    </div>
+ <div class="count" id="flightCount">
+ 6
+ </div>
 
-  `;
+ <div class="flight">
+
+ <div class="mult" id="flightMultiplier">
+ 1.00x
+ </div>
+
+ <div class="plane" id="flightPlane">
+ ✈️
+ </div>
+
+ </div>
+
+ <div class="row">
+
+ <button
+ class="gold"
+ id="flightStart"
+ onclick="startFlight()">
+ START ROUND
+ </button>
+
+ <button
+ class="dark"
+ id="collectButton"
+ disabled
+ onclick="collectFlight()">
+ COLLECT POINTS
+ </button>
+
+ </div>
+
+ <div class="panel">
+
+ <b>Previous Results</b>
+
+ <div class="history"
+ id="flightHistory">
+ </div>
+
+ </div>
+
+ <p class="notice">
+ Demo activity is simulated and clearly labelled.
+ No real-money betting.
+ </p>
+
+ </div>
+
+ `;
+
+ drawHistory();
+
+
+ window.startFlight=function(){
+
+  if(running)return;
+
+  running=true;
+
+  multiplier=1;
+
+  const startButton=
+  document.getElementById("flightStart");
+
+  const collect=
+  document.getElementById("collectButton");
+
+  startButton.disabled=true;
+
+  collect.disabled=true;
+
+  let count=6;
+
+  document.getElementById("flightCount")
+  .textContent=count;
+
+  const countdown=
+  setInterval(()=>{
+
+   count--;
+
+   document.getElementById("flightCount")
+   .textContent=count;
+
+   sound(300+count*50,.05);
+
+   if(count<=0){
+
+    clearInterval(countdown);
+
+    collect.disabled=false;
+
+    const crashPoint=
+    1.3+Math.random()*5;
+
+    const start=
+    performance.now();
+
+    function loop(now){
+
+     if(!running)return;
+
+     multiplier=
+     1+(now-start)/5000;
+
+     document.getElementById("flightMultiplier")
+     .textContent=
+     multiplier.toFixed(2)+"x";
+
+     document.getElementById("flightPlane")
+     .style.left=
+     Math.min(
+      88,
+      7+(multiplier-1)*13
+     )+"%";
+
+     if(multiplier>=crashPoint){
+
+      finishFlight();
+
+      return;
+
+     }
+
+     animation=
+     requestAnimationFrame(loop);
+
+    }
+
+    animation=
+    requestAnimationFrame(loop);
+
+   }
+
+  },700);
+
+ };
+
+
+ window.collectFlight=function(){
+
+  if(!running)return;
+
+  const earned=
+  Math.floor(multiplier*20);
+
+  points+=earned;
+
+  score+=earned;
+
+  save();
+
+  running=false;
+
+  cancelAnimationFrame(animation);
+
+  document.getElementById("collectButton")
+  .disabled=true;
+
+  document.getElementById("flightStart")
+  .disabled=false;
+
+  document.getElementById("flightMultiplier")
+  .textContent=
+  "COLLECTED +"+earned;
+
+  document.getElementById("flightCount")
+  .textContent="✓";
+
+  sound(900,.15);
+
+ };
+
+
+ function finishFlight(){
+
+  running=false;
+
+  document.getElementById("collectButton")
+  .disabled=true;
+
+  document.getElementById("flightStart")
+  .disabled=false;
+
+  const result=
+  multiplier.toFixed(2);
+
+  history.unshift(result);
+
+  history=
+  history.slice(0,12);
+
+  localStorage.setItem(
+   "sfHistory",
+   JSON.stringify(history)
+  );
+
+  document.getElementById("flightMultiplier")
+  .textContent=
+  "CRASH "+result+"x";
+
+  document.getElementById("flightCount")
+  .textContent=
+  "CRASHED";
+
+  drawHistory();
+
+  sound(100,.3);
+
+ }
+
+
+ function drawHistory(){
+
+  const h=
+  document.getElementById("flightHistory");
+
+  if(!h)return;
+
+  h.innerHTML=
+  history.map(x=>
+  `<span class="pill">${x}x</span>`
+  ).join("");
+
+ }
 
 }
 
-/* MODAL OUTSIDE CLICK */
 
-document.getElementById("gameModal")
-.addEventListener("click",e=>{
+/* ================= LEADERBOARD ================= */
 
-  if(e.target.id==="gameModal")
-    closeGame();
+function renderLeaderboard(){
 
-});
+ const names=[
+  "Denny",
+  "Aarav",
+  "Riya",
+  "Kabir",
+  "Demo Player"
+ ];
 
-document.getElementById("walletModal")
-.addEventListener("click",e=>{
+ let values=
+ names.map((name,i)=>({
+  name,
+  score:
+  Math.max(
+   100,
+   score+500-i*65+
+   Math.floor(Math.random()*100)
+  )
+ }));
 
-  if(e.target.id==="walletModal")
-    closeWallet();
+ values.sort(
+  (a,b)=>b.score-a.score
+ );
 
-});
+ document.getElementById("leaders")
+ .innerHTML=
+ values.map((x,i)=>`
+
+ <li style="
+ display:flex;
+ justify-content:space-between;
+ padding:11px 0;
+ border-bottom:1px solid #292e3a
+ ">
+
+ <span>
+ ${["🥇","🥈","🥉","4️⃣","5️⃣"][i]}
+ ${x.name}
+ </span>
+
+ <b>${x.score} pts</b>
+
+ </li>
+
+ `).join("");
+
+}
+
+
+/* ================= GAMES HUB ================= */
+
+function renderGames(){
+
+ const data=[
+  ["🎲","Ludo","ludo"],
+  ["💣","Mines","mines"],
+  ["🎰","Slots","slots"],
+  ["🃏","Rummy Style","rummy"],
+  ["♠️","Teen Patti Style","patti"],
+  ["🐯","Dragon vs Tiger","dvt"],
+  ["🍾","Bottle Shooting","bottle"],
+  ["✈️","Flight Arcade","flight"]
+ ];
+
+ document.getElementById("gamesGrid")
+ .innerHTML=
+ data.map(g=>`
+
+ <div class="gameCard">
+
+ <span class="gameIcon">${g[0]}</span>
+
+ <b>${g[1]}</b>
+
+ <button
+ class="gold"
+ onclick="openGame('${g[2]}')">
+ PLAY
+ </button>
+
+ </div>
+
+ `).join("");
+
+}
+
+
+/* ================= FEEDBACK ================= */
+
+function sendFeedback(){
+
+ const text=
+ document.getElementById("feedback")
+ .value.trim();
+
+ if(!text){
+
+  alert("Feedback likho.");
+
+  return;
+
+ }
+
+ localStorage.setItem(
+  "sfFeedback",
+  text
+ );
+
+ document.getElementById("feedback")
+ .value="";
+
+ alert("Feedback saved on this device.");
+
+}
+
+
+/* INITIALIZE */
+
+renderGames();
+renderLeaderboard();
+save();
 
 </script>
 
